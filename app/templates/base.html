@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block title %}
+    {% if title %}
+    <title>{{ title }} - Xevion.dev</title>    
+    {% else %}
+    <title>Xevion.dev</title>
+    {% endif %}
+    {% endblock %}
+    {% block head %}
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulmaswatch/0.7.2/yeti/bulmaswatch.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-divider@2.0.1/dist/css/bulma-divider.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style type="text/css">
+        {% block css %}
+        /* Single line word breaking for content */
+        .word-break {
+            word-wrap: break-word;
+        }
+
+        .raleway-font {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.75rem;
+        }
+        {% endblock css %}
+    </style>
+    {% endblock head %}
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item raleway-font" href="{{ url_for('index') }}">
+                Xevion
+            </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                {% block navbarstart %}
+                <a href="{{ url_for('index') }}" class="navbar-item">Home</a>
+                {% endblock navbarstart %}
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        {% block navbarend %}
+                        {% if current_user.is_anonymous %}
+
+                        {% if not hideSignup %}
+                        <a href="{{ url_for('signup') }}" class="button is-outlined is-info">Signup</a>
+                        {% endif %}
+                        {% if not hideLogin %}
+                        <a href="{{ url_for('login') }}" class="button is-outlined is-info">Login</a>                        
+                        {% endif %}
+                        
+                        {% else %}
+                        <a href="{{ url_for('logout') }}" class="button is-outlined is-info">Logout</a>
+                        {% endif %}
+
+                        {% endblock navbarend %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block body %}
+
+    {% endblock body %}
+
+</body>

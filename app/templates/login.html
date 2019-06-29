@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% macro error(text, title='Error') -%}
+<article class="message is-small is-danger">
+    <div class="message-header">
+        <p>{{ title }}</p>
+        <button class="delete" aria-label="delete"></button>
+    </div>
+    <div class="message-body">
+        {{ text }}
+    </div>
+</article>
+{%- endmacro %}
+
+{% block body %}
+<!-- Login Section -->
+<section class="section section-padding">
+    <div class="container">
+        <div class="columns is-mobile is-multiline is-centered">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title">
+                        <h1 class="title">{{ title }}</h1>
+                    </div>
+                </div>
+                <div class="card-content">
+                    {% with messages = get_flashed_messages() %}
+                    {% for message in messages %}
+                    {{ error(message, title='Error - Login Error') }}
+                    {% endfor %}
+                    {% endwith %}
+                    {% for formerror in form.username.errors %}
+                    {{ error(formerror, title='Error - Username') }}
+                    {% endfor %}
+                    {% for formerror in form.password.errors %}
+                    {{ error(formerror, title='Error - Password') }}
+                    {% endfor %}
+                    <!-- Sign-in Form-->
+                    <form action="" method="post" novalidate>
+                        {{ form.hidden_tag() }}
+                        <!-- Username Field -->
+                        <div class="field">
+                            {{ form.username.label }}
+                            <p class="control has-icons-left">
+                                {{ form.username(size=32, class_="input", placeholder="Username") }}
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </p>
+                            <!-- Password Field -->
+                        </div>
+                        <div class="field">
+                            {{ form.password.label }}
+                            <p class="control has-icons-left">
+                                {{ form.password(size=32, class_="input", placeholder="Password") }}
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <!-- Checkbox/Button Field -->
+                        <div class="columns is-mobile is-vcentered is-centered">
+                            <!-- Remember Me Checkbox Field -->
+                            <div class="column is-6">
+                                <label class="checkbox">
+                                    {{ form.remember_me(class_="checkbox") }} {{ form.remember_me.label }}</p>
+                                    <label>
+                            </div>
+                            <div class="column is-2"></div>
+                            <!-- Submit Button Field -->
+                            <div class="column is-4">
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form.submit(class_="button is-success") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Login Section -->
+{% endblock body %}

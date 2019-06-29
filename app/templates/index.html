@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block body %}
+<!-- Hero Section -->
+<section class="hero is-fullheight-with-navbar">
+	<div class="hero-body">
+		<div class="container has-text-centered">
+			<p class="title">
+				Xevion
+			</p>
+			<p class="subtitle">
+				Python Developer
+			</p>
+		</div>
+	</div>
+</section>
+<!-- End Hero Section -->
+
+<section class="section">
+	<div class="is-divider" data-content="Recent Projects"></div>
+</section>
+
+<!-- Section -->
+<section class="section section-padding">
+	<div class="container">
+		{% if content %}
+		<div class="columns is-mobile is-multiline is-centered">
+
+			{% for card in content %}
+			<div class="column is-5">
+				<!-- Card -->
+				<div class="card">
+					<div class="card-header">
+						<div class="card-header-title">
+							{{  card.title }}
+						</div>
+					</div>
+					<div class="card-image">
+						<figure class="image">
+							<img src="https://picsum.photos/600/400/?random={{ card.seed }}" alt="Picsum Picture">
+						</figure>
+					</div>
+					<div class="card-content">
+						<div class="content word-break">
+							{{ card.text }}
+						</div>
+					</div>
+				</div>
+				<!-- Card End -->
+			</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+	</div>
+</section>
+<!-- End Dynamic Content -->
+{% endblock body %}
