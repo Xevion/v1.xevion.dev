@@ -88,20 +88,24 @@ def boolparse(string, default=False):
     #     return False
     else:
         return False
-
+ 
 @app.route('/hidden<id>/help')
 @login_required
 def hidden_help(id):
-    if id != app.config['HIDDEN_URL']:
-        return '{} != {}'.format(id, app.config['HIDDEN_URL'])
+    id = str(id).strip()
+    val = str(app.config['HIDDEN_URL']).strip()
+    if id != val:
+        return '{} != {}'.format(id, val)
     else:
         return render_template('hidden_help.html')
 
 @app.route('/hidden<id>')
 @login_required
 def hidden(id):
-    if id != app.config['HIDDEN_URL']:
-        return '{} != {}'.format(id, app.config['HIDDEN_URL'])
+    id = str(id).strip()
+    val = str(app.config['HIDDEN_URL']).strip()
+    if id != val:
+        return '{} != {}'.format(id, val)
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
