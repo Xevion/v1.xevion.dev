@@ -18,13 +18,21 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-title">
-                            Bruh Moment
+                            Bruh Moment #{{ image.index }}
                         </div>
                     </div>
                     <div class="card-image">
                         <a href="{{ image.real_url }}">
                             <figure class="image">
+                                {% if base64 %}
+                                <img src="data:image/png;base64,{{ image.base64 }}">
+                                {% else %}
+                                {% if showsample %}
+                                <img src="{{ image.sample_url }}">
+                                {% else %}
                                 <img src="{{ image.real_url }}" alt="{{ image.sample_url }}">
+                                {% endif %}
+                                {% endif %}
                             </figure>
                         </a>
                     </div>
