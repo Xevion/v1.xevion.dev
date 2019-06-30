@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block body %}
+<section class="section section-padding">
+	<div class="container">
+		<div class="columns is-mobile is-multiline is-centered">
+            {% for image in data %}
+            <!-- Card Content -->
+            <div class="column is-5">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-header-title">
+							Bruh Moment
+						</div>
+					</div>
+					<div class="card-image">
+						<figure class="image">
+							<img src="{{ image.url }}" alt="">
+						</figure>
+					</div>
+					<div class="card-content">
+						<div class="content word-break">
+							{{ image.tags }}
+						</div>
+					</div>
+				</div>
+				<!-- Card End -->
+			</div>
+			{% endfor %}
+		</div>
+<!-- Card Column Content -->
+    </div>
+</section>
+{% endblock body %}

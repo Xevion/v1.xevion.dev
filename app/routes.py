@@ -1,6 +1,7 @@
 from app import app
 from app.models import User
 from app.forms import LoginForm
+from app.hidden import trap
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
@@ -13,7 +14,6 @@ fake = faker.Faker()
 
 def strgen(length): return ''.join(
     random.choices(list(string.ascii_letters), k=length))
-
 
 @app.route('/dashboard')
 def dashboard():
