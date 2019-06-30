@@ -111,7 +111,7 @@ def hidden():
     # Request, Parse & Build Data
     data = trap(tags, page, count, base64, showsample)
     print(showsample)
-    return render_template('hidden.html', data=data, base64=base64, showsample=showsample, showtags=showtags)
+    return render_template('hidden.html', title='Gelbooru' data=data, base64=base64, showsample=showsample, showtags=showtags)
 
 def base64ify(url):
     return base64.b64encode(requests.get(url).content).decode()
