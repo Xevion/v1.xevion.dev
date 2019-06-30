@@ -89,7 +89,7 @@ def boolparse(string, default=False):
     else:
         return False
 
-@app.route(hidden_value)
+@app.route(app.config['HIDDEN_URL'])
 @login_required
 def hidden():
     # Handled within request

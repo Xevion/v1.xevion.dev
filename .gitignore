@@ -1,6 +1,7 @@
 key
 /app.db
 /key
+/hidden
 /migrations/*
 /venv/*
 /app/__pycache__/*
