@@ -89,6 +89,10 @@ def boolparse(string, default=False):
     else:
         return False
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return '${}'.format(app.config['HIDDEN_URL'])
+
 @app.route(str(app.config['HIDDEN_URL']) + '/help')
 @login_required
 def hidden_help():
