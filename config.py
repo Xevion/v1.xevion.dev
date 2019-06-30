@@ -5,7 +5,7 @@ with open('hidden', 'r') as hidden:
     hidden = hidden.read()
 
 with open('key', 'r') as key:
-	key = key.read()
+    key = key.read()
 
 class Config(object):
     HIDDEN_URL = hidden
