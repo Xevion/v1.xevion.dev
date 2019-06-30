@@ -89,21 +89,19 @@ def boolparse(string, default=False):
     else:
         return False
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return '404<br>${}'.format(app.config['HIDDEN_URL'])
-
-hidden_url = app.config['HIDDEN_URL']
-hidden_help_url = hidden_url + '/help'
-
-@app.route(hidden_help_url)
+@app.route('/hidden<id>/help')
 @login_required
-def hidden_help():
-    return render_template('hidden_help.html')
+def hidden_help(id):
+    if id != app.config['HIDDEN_URL']:
+        return 'bad id'
+    else:
+        return render_template('hidden_help.html')
 
-@app.route(hidden_url)
+@app.route('/hidden<id>')
 @login_required
-def hidden():
+def hidden(id):
+    if id != app.config['HIDDEN_URL']:
+        return 'bad id'
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
