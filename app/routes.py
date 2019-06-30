@@ -16,7 +16,7 @@ def strgen(length): return ''.join(
     random.choices(list(string.ascii_letters), k=length))
 
 @app.route('/api')
-def apoi():
+def api():
     return 'fuckoff'
 
 @app.route('/dashboard')
