@@ -96,7 +96,7 @@ def page_not_found(e):
 hidden_url = app.config['HIDDEN_URL']
 hidden_help_url = hidden_url + '/help'
 
-@app.route(hidden_url_help)
+@app.route(hidden_help_url)
 @login_required
 def hidden_help():
     return render_template('hidden_help.html')
