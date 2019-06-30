@@ -88,24 +88,26 @@ def boolparse(string, default=False):
     #     return False
     else:
         return False
- 
+
+# The only implementation I could get to work
+def validate_id(id):
+    id = str(id).strip()
+    val = str(app.config['HIDDEN_URL']).strip()
+    return id == val
+
 @app.route('/hidden<id>/help')
 @login_required
 def hidden_help(id):
-    id = str(id).strip()
-    val = str(app.config['HIDDEN_URL']).strip()
-    if id != val:
-        return '{} != {}'.format(id, val)
-    else:
+    if validate_id(id):
         return render_template('hidden_help.html')
+    else:
+        return 'error: bad id'
 
 @app.route('/hidden<id>')
 @login_required
 def hidden(id):
-    id = str(id).strip()
-    val = str(app.config['HIDDEN_URL']).strip()
-    if id != val:
-        return '{} != {}'.format(id, val)
+    if not validate_id(id):
+        return 'bad id'
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
