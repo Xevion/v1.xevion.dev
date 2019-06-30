@@ -15,6 +15,10 @@ fake = faker.Faker()
 def strgen(length): return ''.join(
     random.choices(list(string.ascii_letters), k=length))
 
+@app.route('/api')
+def apoi():
+    return 'fuckoff'
+
 @app.route('/dashboard')
 def dashboard():
     return ''
