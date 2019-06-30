@@ -101,7 +101,7 @@ def hidden_help(id):
 @login_required
 def hidden(id):
     if id != app.config['HIDDEN_URL']:
-        return '{}<br>{}<br>{}'.format(app.config['HIDDEN_URL'], str(type(app.config['HIDDEN_URL'])), str(type(id)))
+        return '{} != {}'.format(id, app.config['HIDDEN_URL'])
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
