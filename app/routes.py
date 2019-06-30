@@ -93,7 +93,7 @@ def boolparse(string, default=False):
 @login_required
 def hidden_help(id):
     if id != app.config['HIDDEN_URL']:
-        return '{}<br>{}<br>{}'.format(app.config['HIDDEN_URL'], str(type(app.config['HIDDEN_URL'])), str(type(id)))
+        return '{} != {}'.format(id, app.config['HIDDEN_URL'])
     else:
         return render_template('hidden_help.html')
 
