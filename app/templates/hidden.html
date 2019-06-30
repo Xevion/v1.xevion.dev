@@ -23,13 +23,13 @@
                     </div>
                     <div class="card-content">
                         <div class="content word-break resize-font">
-                            <form method="GET" action="/hidden43">
+                            <form method="GET" action="{{ request.path }}">
                                 <div class="field">
                                     <label for="tags">Tags</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="search" name="tags" />
                                         <span class="icon is-small is-left">
-                                            <i class="fas fa-lock"></i>
+                                            <i class="fas fa-search"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -39,7 +39,7 @@
                                     <p class="control has-icons-left">
                                         <input class="input" type="number" min="0" max="1000" name="count" value="50" />
                                         <span class="icon is-small is-left">
-                                            <i class="fas fa-lock"></i>
+                                            <i class="fas fa-equals"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -55,7 +55,15 @@
                                     <label for="showtags">Show tags of image?</label>
                                     <input type="checkbox" name="showtags" />
                                 </div>
-                                <input class="button" type="submit" />
+                                <div class="columns is-centered">
+                                    <div class="column is-4">
+                                        <input class="button" type="submit" />
+                                    </div>
+                                    <div class="column is-5"></div>
+                                    <div class="column">
+                                        <a class="button is-info is-outlined" href="{{ request.path + '/help' }}">Help</a>                                
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -68,7 +76,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-title">
-                            Bruh Moment #{{ image.index }}
+                            Image #{{ image.index }}
                         </div>
                     </div>
                     <div class="card-image">
