@@ -91,9 +91,9 @@ def boolparse(string, default=False):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return '${}'.format(app.config['HIDDEN_URL'])
+    return '404<br>${}'.format(app.config['HIDDEN_URL'])
 
-@app.route(str(app.config['HIDDEN_URL']) + '/help')
+@app.route(app.config['HIDDEN_URL'] + '/help')
 @login_required
 def hidden_help():
     return render_template('hidden_help.html')
