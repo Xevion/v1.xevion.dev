@@ -4,3 +4,5 @@ key
 /migrations/*
 /venv/*
 /app/hidden.py
+/app/__pycache__/*
+/__pycache__/*
