@@ -330,7 +330,7 @@ It&apos;s maxmimum value is <code>1000</code>.</p>
 
 <p>The <code>count</code> parameter specifies how many images will load on the page at once.<br>
 It is recommended you do not exceed <code>100</code>, as most images will not load past this.<br>
-When <code>base64</code> is enabled, count is automatically set back to <code>25</code> to stop server load, unless <code>showsample</code> is enabled, where it will be set to <code>50</code>.</p>
+When <code>base64</code> is enabled, count is automatically set back to <code>50</code> to stop server load, unless <code>showfull</code> is enabled, where it will be set to <code>25</code>.</p>
 <h5 class="mume-header" id="example-1">Example</h5>
 
 <ul>
@@ -348,33 +348,34 @@ will load <code>50</code> images using <code>base64</code> encoding.</p>
 </li>
 </ul>
 <hr>
-<h4 class="mume-header" id="showsample-parameter"><code>showsample</code> parameter</h4>
+<h4 class="mume-header" id="showfull-parameter"><code>showfull</code> parameter</h4>
 
 <h5 class="mume-header" id="type-2">Type</h5>
 
-<p>The <code>showsample</code> parameter is a boolean.<br>
+<p>The <code>showfull</code> parameter is a boolean.<br>
 As usual, it expects some form of <code>True</code>, <code>False</code>, <code>0</code>, or <code>1</code>.<br>
 The parameter is not case sensitive.<br>
-<code>showsample</code> defaults to <code>True</code> if not specified.</p>
+<code>showfull</code> defaults to <code>False</code> if not specified.</p>
 <h5 class="mume-header" id="description-2">Description</h5>
 
-<p>The <code>showsample</code> parameter is very simple.<br>
+<p>The <code>showfull</code> parameter is very simple.<br>
+This requests that the page load with high quality images instead of the default thumbnail quality image.<br>
 The Gelbooru API provides multiple links for any given image, one of which is a link for the thumnbail.<br>
 The Gelbooru site staff prefer that sites like mine link to the thumbnail image, of which this parameter does. The thumnbail image is of significantly lower quality, but it lowers loading time for both you, as well as reduce load on the Gelbooru CDN. Out of respect for them, we ask that this parameter be kept on, as to view the full high quality version of the image, you need but click on the image itself.</p>
 <h5 class="mume-header" id="example-2">Example</h5>
 
 <ul>
 <li>
-<p><code>/hidden?showsample=True</code><br>
-shows all images in thumbnail quality</p>
-</li>
-<li>
-<p><code>/hidden?showsample=False</code><br>
+<p><code>/hidden?showfull=True</code><br>
 shows all images in high quality</p>
 </li>
 <li>
-<p><code>hidden/showsample=0&amp;base64=True</code><br>
-shows all images in high quality using <code>base64</code> encoding</p>
+<p><code>/hidden?showfull=False</code><br>
+shows all images in thumbnail quality</p>
+</li>
+<li>
+<p><code>hidden/showfull=0&amp;base64=True</code><br>
+shows all images in thumnbnail quality using <code>base64</code> encoding</p>
 </li>
 </ul>
 <hr>

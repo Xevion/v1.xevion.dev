@@ -45,15 +45,15 @@
                                 </div>
                                 <div class="field">
                                     <label for="base64">Use base64 encoding?</label>
-                                    <input type="checkbox" name="base64" />
+                                    <input type="checkbox" name="base64" value="true" />
                                 </div>
                                 <div class="field">
-                                    <label for="showsample">Show sample (thumbnail image)?</label>
-                                    <input type="checkbox" name="showsample" />
+                                    <label for="showsample">Show fullsize (instead of thumbnail image)?</label>
+                                    <input type="checkbox" name="showfull" value="true"/>
                                 </div>
                                 <div class="field">
                                     <label for="showtags">Show tags of image?</label>
-                                    <input type="checkbox" name="showtags" />
+                                    <input type="checkbox" name="showtags" value="true" />
                                 </div>
                                 <div class="columns is-centered">
                                     <div class="column is-4">
@@ -85,10 +85,10 @@
                                 {% if base64 %}
                                 <img src="data:image/png;base64,{{ image.base64 }}">
                                 {% else %}
-                                {% if showsample %}
-                                <img src="{{ image.sample_url }}">
-                                {% else %}
+                                {% if showfull %}
                                 <img src="{{ image.real_url }}" alt="{{ image.sample_url }}">
+                                {% else %}
+                                <img src="{{ image.sample_url }}">
                                 {% endif %}
                                 {% endif %}
                             </figure>

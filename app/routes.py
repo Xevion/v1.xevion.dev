@@ -121,20 +121,18 @@ def hidden(id):
         return '\"count\" parameter must be Integer.<br>Invalid \"count\": \"{}\"'.format(request.args.get('count'))
     base64 = boolparse(request.args.get('base64'))
     # Handled within Jinja template
-    print(request.args.get('showsample'))
-    showsample = boolparse(request.args.get('showsample'), default=True)
+    showfull = boolparse(request.args.get('showfull'))
     showtags = boolparse(request.args.get('showtags'))
     # Request, Parse & Build Data
-    data = trap(tags, page, count, base64, showsample)
-    print(showsample)
-    return render_template('hidden.html', title='Gelbooru', data=data, base64=base64, showsample=showsample, showtags=showtags)
+    data = trap(tags, page, count, base64, showfull)
+    return render_template('hidden.html', title='Gelbooru', data=data, base64=base64, showfull=showfull, showtags=showtags)
 
 def base64ify(url):
     return base64.b64encode(requests.get(url).content).decode()
 
 gelbooru_url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags={}&pid={}&limit={}"
 
-def trap(tags, page, count, base64, showsample):
+def trap(tags, page, count, base64, showfull):
     # URL Building & Request
     temp = gelbooru_url.format(tags, page, count)
     response = requests.get(temp).text
@@ -150,7 +148,7 @@ def trap(tags, page, count, base64, showsample):
                 'tags' : element['@tags']
                 }
         if base64:
-            if showsample:
+            if not showfull:
                 temp['base64'] = base64ify(temp['sample_url'])
             else:
                 temp['base64'] = base64ify(temp['real_url'])

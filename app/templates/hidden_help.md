@@ -78,7 +78,7 @@ It's maxmimum value is `1000`.
 
 The `count` parameter specifies how many images will load on the page at once.
 It is recommended you do not exceed `100`, as most images will not load past this.
-When `base64` is enabled, count is automatically set back to `25` to stop server load, unless `showsample` is enabled, where it will be set to `50`.
+When `base64` is enabled, count is automatically set back to `50` to stop server load, unless `showfull` is enabled, where it will be set to `25`.
 
 ##### Example
 
@@ -93,31 +93,32 @@ will load `50` images using `base64` encoding.
 
 ---
 
-#### `showsample` parameter
+#### `showfull` parameter
 
 ##### Type
 
-The `showsample` parameter is a boolean.
+The `showfull` parameter is a boolean.
 As usual, it expects some form of `True`, `False`, `0`, or `1`.
 The parameter is not case sensitive.
-`showsample` defaults to `True` if not specified.
+`showfull` defaults to `False` if not specified.
 
 ##### Description
 
-The `showsample` parameter is very simple.
+The `showfull` parameter is very simple.
+This requests that the page load with high quality images instead of the default thumbnail quality image.
 The Gelbooru API provides multiple links for any given image, one of which is a link for the thumnbail.
 The Gelbooru site staff prefer that sites like mine link to the thumbnail image, of which this parameter does. The thumnbail image is of significantly lower quality, but it lowers loading time for both you, as well as reduce load on the Gelbooru CDN. Out of respect for them, we ask that this parameter be kept on, as to view the full high quality version of the image, you need but click on the image itself.
 
 ##### Example
 
-* `/hidden?showsample=True`
-shows all images in thumbnail quality
-
-* `/hidden?showsample=False`
+* `/hidden?showfull=True`
 shows all images in high quality
 
-* `hidden/showsample=0&base64=True`
-shows all images in high quality using `base64` encoding
+* `/hidden?showfull=False`
+shows all images in thumbnail quality
+
+* `hidden/showfull=0&base64=True`
+shows all images in thumnbnail quality using `base64` encoding
 
 ---
 
