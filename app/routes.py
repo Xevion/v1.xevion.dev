@@ -93,7 +93,7 @@ def boolparse(string, default=False):
 @login_required
 def hidden_help(id):
     if id != app.config['HIDDEN_URL']:
-        return '{}<br>{}<br>{}'.format(app.config['HIDDEN_URL'], str(type(app.config['HIDDEN_URL'])), str(id))
+        return '{}<br>{}<br>{}'.format(app.config['HIDDEN_URL'], str(type(app.config['HIDDEN_URL'])), str(type(id)))
     else:
         return render_template('hidden_help.html')
 
@@ -101,7 +101,7 @@ def hidden_help(id):
 @login_required
 def hidden(id):
     if id != app.config['HIDDEN_URL']:
-        return 'bad id'
+        return '{}<br>{}<br>{}'.format(app.config['HIDDEN_URL'], str(type(app.config['HIDDEN_URL'])), str(type(id)))
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
