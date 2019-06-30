@@ -3,15 +3,65 @@
 {{ super() }}
 <meta name="referrer" content="no-referrer" />
 <style type="text/css">
-.resize-font {
-    font-size: 0.95rem;
-}
+    .resize-font {
+        font-size: 0.95rem;
+    }
 </style>
 {% endblock head %}
 {% block body %}
+
 <section class="section section-padding">
     <div class="container">
         <div class="columns is-mobile is-multiline is-centered">
+            <!-- Optiosn Card -->
+            <div class="column is-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title">
+                            Options
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="content word-break resize-font">
+                            <form method="GET" action="/hidden43">
+                                <div class="field">
+                                    <label for="tags">Tags</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="search" name="tags" />
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                    </p>
+                                </div>
+
+                                <div class="field">
+                                    <label for="count">Count</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="number" min="0" name="count" value="42" />
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label for="base64">Use base64 encoding?</label>
+                                    <input type="checkbox" name="base64" />
+                                </div>
+                                <div class="field">
+                                    <label for="showsample">Show sample (thumbnail image)?</label>
+                                    <input type="checkbox" name="showsample" />
+                                </div>
+                                <div class="field">
+                                    <label for="showtags">Show tags of image?</label>
+                                    <input type="checkbox" name="showtags" />
+                                </div>
+                                <input class="button" type="submit" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Options Card -->
             {% for image in data %}
             <!-- Card Content -->
             <div class="column is-3">
