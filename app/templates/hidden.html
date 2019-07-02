@@ -36,8 +36,8 @@
                                     <label for="tags">Tags</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="search" name="tags" value="{{ tags }}""/>
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-search"></i>
+                                        <span class=" icon is-small is-left">
+                                        <i class="fas fa-search"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -45,7 +45,8 @@
                                 <div class="field">
                                     <label for="count">Count</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="number" min="0" max="1000" name="count" value="{{ count or 50}}" />
+                                        <input class="input" type="number" min="0" max="1000" name="count"
+                                            value="{{ count or 50}}" />
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-equals"></i>
                                         </span>
@@ -54,7 +55,8 @@
                                 <div class="field">
                                     <label for="page">Page</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="number" min="0" max="1000" name="page" value="{{ page or 0 }}" />
+                                        <input class="input" type="number" min="0" max="1000" name="page"
+                                            value="{{ page or 0 }}" />
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-flask"></i>
                                         </span>
@@ -62,15 +64,18 @@
                                 </div>
                                 <div class="field">
                                     <label for="base64">Use base64 encoding?</label>
-                                    <input type="checkbox" name="base64" value="true" {% if base64 %}checked{% endif %}/>
+                                    <input type="checkbox" name="base64" value="true"
+                                        {% if base64 %}checked{% endif %} />
                                 </div>
                                 <div class="field">
                                     <label for="showsample">Show fullsize (instead of thumbnail image)?</label>
-                                    <input type="checkbox" name="showfull" value="true" {% if showfull %}checked{% endif %}/>
+                                    <input type="checkbox" name="showfull" value="true"
+                                        {% if showfull %}checked{% endif %} />
                                 </div>
                                 <div class="field">
                                     <label for="showtags">Show tags of image?</label>
-                                    <input type="checkbox" name="showtags" value="true" {% if showtags %}checked{% endif %}/>
+                                    <input type="checkbox" name="showtags" value="true"
+                                        {% if showtags %}checked{% endif %} />
                                 </div>
                                 <div class="columns is-centered">
                                     <div class="column is-4">
@@ -78,7 +83,8 @@
                                     </div>
                                     <div class="column is-5"></div>
                                     <div class="column">
-                                        <a class="button is-info is-outlined" href="{{ request.path + '/help' }}">Help</a>                                
+                                        <a class="button is-info is-outlined"
+                                            href="{{ request.path + '/help' }}">Help</a>
                                     </div>
                                 </div>
                             </form>
@@ -93,7 +99,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-title">
-                            Image #{{ image.index }} <a href="{{ image.view }}"><sup class="sup" >source</sup></a>
+                            Image #{{ image.index }} <a href="{{ image.view }}"><sup class="sup">source</sup></a>
                         </div>
                     </div>
                     <div class="card-image">
@@ -114,11 +120,15 @@
                     {% if showtags %}
                     <div class="card-content">
                         <div class="content word-break resize-font">
-                            {% for tag in image.tags %}
-                            <span class="pad-tag tag">
-                                {{ tag }}
-                            </span>
-                            {% endfor %}
+                            <details>
+                                <summary>Show Tags</summary>
+                                <div class="is-divider" data-content="Tags ({{ image.tags|length }})"></div>
+                                {% for tag in image.tags %}
+                                <span class="pad-tag tag">
+                                    {{ tag }}
+                                </span>
+                                {% endfor %}
+                            </details>
                         </div>
                     </div>
                     {% endif %}

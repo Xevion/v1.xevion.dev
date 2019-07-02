@@ -12,7 +12,7 @@
     {% block head %}
     <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-divider@2.0.1/dist/css/bulma-divider.min.css">
+
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <style type="text/css">
         /* Single line word breaking for content */
@@ -26,6 +26,7 @@
         }
     </style>
     {% endblock head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-divider@2.0.1/dist/css/bulma-divider.min.css">
 </head>
 
 <body>
@@ -35,7 +36,9 @@
                 Xevion
             </a>
 
-            <a role="button" id="navbar-burger-id" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false">
+            <a role="button" id="navbar-burger-id" class="navbar-burger burger"
+                onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu"
+                aria-expanded="false">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
