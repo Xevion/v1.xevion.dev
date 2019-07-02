@@ -7,6 +7,10 @@
         font-size: 0.95rem;
     }
 
+    .sup {
+        font-size: 60%;
+    }
+
     .pad-tag {
         margin: 0.10rem;
     }
@@ -89,7 +93,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-title">
-                            Image #{{ image.index }}
+                            Image #{{ image.index }} <a href="{{ image.view }}"><sup class="sup" >source</sup></a>
                         </div>
                     </div>
                     <div class="card-image">

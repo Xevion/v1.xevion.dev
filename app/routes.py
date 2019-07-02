@@ -136,11 +136,12 @@ def hidden(id):
 def base64ify(url):
     return base64.b64encode(requests.get(url).content).decode()
 
-gelbooru_url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags={}&pid={}&limit={}"
+gelbooru_api_url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags={}&pid={}&limit={}"
+gelbooru_view_url = "https://gelbooru.com/index.php?page=post&s=view&id={}"
 
 def trap(tags, page, count, base64, showfull):
     # URL Building & Request
-    temp = gelbooru_url.format(tags, page, count)
+    temp = gelbooru_api_url.format(tags, page, count)
     response = requests.get(temp).text
     # XML Parsing & Data Building
     parse = xmltodict.parse(response)
@@ -156,7 +157,9 @@ def trap(tags, page, count, base64, showfull):
                 'index' : str(index + 1),
                 'real_url' : element['@file_url'],
                 'sample_url' : element['@preview_url'],
-                'tags' : list(filter(lambda x : x != '', [tag.strip() for tag in element['@tags'].split(' ')]))
+                # strips tags, ensures no empty tags (may be unnescary)
+                'tags' : list(filter(lambda tag : tag != '', [tag.strip() for tag in element['@tags'].split(' ')])),
+                'view' : gelbooru_view_url.format(element['@id'])
                 }
         if base64:
             if not showfull:
