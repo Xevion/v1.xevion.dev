@@ -111,7 +111,7 @@ def hidden(id):
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
-        page = int(request.args.get('page') or 1) - 1
+        page = int(request.args.get('page') or 1)
     except (TypeError, ValueError):
         return '\"page\" parameter must be Integer.<br>Invalid \"page\" parameter: \"{}\"'.format(request.args.get('page'))
     # Handled within building
@@ -124,8 +124,14 @@ def hidden(id):
     showfull = boolparse(request.args.get('showfull'))
     showtags = boolparse(request.args.get('showtags'))
     # Request, Parse & Build Data
-    data = trap(tags, page, count, base64, showfull)
-    return render_template('hidden.html', title='Gelbooru', data=data, base64=base64, showfull=showfull, showtags=showtags)
+    data = trap(tags, page-1, count, base64, showfull)
+    # Handling for limiters
+    if base64:
+        if showfull:
+            count = min(25, count)
+        else:
+            count = min(50, count)
+    return render_template('hidden.html', title='Gelbooru Browser', data=data, tags=tags, page=page, count=count, base64=base64, showfull=showfull, showtags=showtags)
 
 def base64ify(url):
     return base64.b64encode(requests.get(url).content).decode()
@@ -140,12 +146,17 @@ def trap(tags, page, count, base64, showfull):
     parse = xmltodict.parse(response)
     build = []
     
+    try:
+        parse['posts']['post']
+    except KeyError:
+        return build
+
     for index, element in enumerate(parse['posts']['post'][:count]):
         temp = {
                 'index' : str(index + 1),
                 'real_url' : element['@file_url'],
                 'sample_url' : element['@preview_url'],
-                'tags' : element['@tags']
+                'tags' : list(filter(lambda x : x != '', [tag.strip() for tag in element['@tags'].split(' ')]))
                 }
         if base64:
             if not showfull:

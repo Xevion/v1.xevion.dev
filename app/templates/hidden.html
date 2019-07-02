@@ -6,6 +6,10 @@
     .resize-font {
         font-size: 0.95rem;
     }
+
+    .pad-tag {
+        margin: 0.10rem;
+    }
 </style>
 {% endblock head %}
 {% block body %}
@@ -27,7 +31,7 @@
                                 <div class="field">
                                     <label for="tags">Tags</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="search" name="tags" />
+                                        <input class="input" type="search" name="tags" value="{{ tags }}""/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-search"></i>
                                         </span>
@@ -37,23 +41,32 @@
                                 <div class="field">
                                     <label for="count">Count</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="number" min="0" max="1000" name="count" value="50" />
+                                        <input class="input" type="number" min="0" max="1000" name="count" value="{{ count or 50}}" />
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-equals"></i>
                                         </span>
                                     </p>
                                 </div>
                                 <div class="field">
+                                    <label for="page">Page</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="number" min="0" max="1000" name="page" value="{{ page or 0 }}" />
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-flask"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
                                     <label for="base64">Use base64 encoding?</label>
-                                    <input type="checkbox" name="base64" value="true" />
+                                    <input type="checkbox" name="base64" value="true" {% if base64 %}checked{% endif %}/>
                                 </div>
                                 <div class="field">
                                     <label for="showsample">Show fullsize (instead of thumbnail image)?</label>
-                                    <input type="checkbox" name="showfull" value="true"/>
+                                    <input type="checkbox" name="showfull" value="true" {% if showfull %}checked{% endif %}/>
                                 </div>
                                 <div class="field">
                                     <label for="showtags">Show tags of image?</label>
-                                    <input type="checkbox" name="showtags" value="true" />
+                                    <input type="checkbox" name="showtags" value="true" {% if showtags %}checked{% endif %}/>
                                 </div>
                                 <div class="columns is-centered">
                                     <div class="column is-4">
@@ -97,7 +110,11 @@
                     {% if showtags %}
                     <div class="card-content">
                         <div class="content word-break resize-font">
-                            {{ image.tags }}
+                            {% for tag in image.tags %}
+                            <span class="pad-tag tag">
+                                {{ tag }}
+                            </span>
+                            {% endfor %}
                         </div>
                     </div>
                     {% endif %}
