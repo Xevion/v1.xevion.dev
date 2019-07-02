@@ -1,17 +1,5 @@
 {% extends 'base.html' %}
 
-{% macro error(text, title='Error') -%}
-<article class="message is-small is-danger">
-    <div class="message-header">
-        <p>{{ title }}</p>
-        <button class="delete" aria-label="delete"></button>
-    </div>
-    <div class="message-body">
-        {{ text }}
-    </div>
-</article>
-{%- endmacro %}
-
 {% block body %}
 <!-- Login Section -->
 <section class="section section-padding">
@@ -26,14 +14,19 @@
                 <div class="card-content">
                     {% with messages = get_flashed_messages() %}
                     {% for message in messages %}
-                    {{ error(message, title='Error - Login Error') }}
+                    {% if category == 'error' %}
+                    {{ flash(title='Error - Login Error', text=message, color='is-danger') }}
+                    {% else %}
+                    {# Will work fine for most other flashed messages #}
+                    {{ flash(title='Info', text=message, color='is-info' )}}
+                    {% endif %}
                     {% endfor %}
                     {% endwith %}
                     {% for formerror in form.username.errors %}
-                    {{ error(formerror, title='Error - Username') }}
+                    {{ flash(title='Error - Username', text=formerror, color='is-danger') }}
                     {% endfor %}
                     {% for formerror in form.password.errors %}
-                    {{ error(formerror, title='Error - Password') }}
+                    {{ flash(title='Error - Password', text=formerror, color='is-danger') }}
                     {% endfor %}
                     <!-- Sign-in Form-->
                     <form action="" method="post" novalidate>

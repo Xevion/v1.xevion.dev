@@ -14,14 +14,23 @@
                 <div class="card-content">
                     {% with messages = get_flashed_messages() %}
                     {% for message in messages %}
-                    {{ error(message, title='Error - Login Error') }}
+                    {{ flash(title='Error - Registration Error', text=formerror, color='is-danger') }}
                     {% endfor %}
                     {% endwith %}
+                    
                     {% for formerror in form.username.errors %}
-                    {{ error(formerror, title='Error - Username') }}
+                    {{ flash(title='Error - Username', text=formerror, color='is-danger') }}
                     {% endfor %}
+                    
+                    {% for formerror in form.email.errors %}
+                    {{ flash(title='Error - Email', text=formerror, color='is-danger') }}
+                    {% endfor %}
+
                     {% for formerror in form.password.errors %}
-                    {{ error(formerror, title='Error - Password') }}
+                    {{ flash(title='Error - Password', text=formerror, color='is-danger') }}
+                    {% endfor %}
+                    {% for formerror in form.password2.errors %}
+                    {{ flash(title='Error - Repeat Password', text=formerror, color='is-danger') }}
                     {% endfor %}
                     <!-- Sign-in Form-->
                     <form action="" method="post" novalidate>
@@ -32,28 +41,42 @@
                             <p class="control has-icons-left">
                                 {{ form.username(size=32, class_="input", placeholder="Username") }}
                                 <span class="icon is-small is-left">
-                                    <i class="fas fa-lock"></i>
+                                    <i class="fas fa-user"></i>
                                 </span>
                             </p>
-                            <!-- Password Field -->
                         </div>
+                        <!-- Email Field -->
                         <div class="field">
-                            {{ form.password.label }}
+                            {{ form.email.label }}
                             <p class="control has-icons-left">
-                                {{ form.password(size=32, class_="input", placeholder="Password") }}
+                                {{ form.email(size=64, class_="input", placeholder="Email Address") }}
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
                             </p>
                         </div>
+                        <!-- Password Field -->
+                        <div class="field">
+                            {{ form.password.label }}
+                            <p class="control has-icons-left">
+                                {{ form.password(size=32, class_="input", placeholder="Password") }}
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <!-- Password2 Field -->
+                        <div class="field">
+                            {{ form.password2.label }}
+                            <p class="control has-icons-left">
+                                {{ form.password2(size=32, class_="input", placeholder="Repeat Password") }}
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </p>
+                        </div>
                         <!-- Checkbox/Button Field -->
                         <div class="columns is-mobile is-vcentered is-centered">
-                            <!-- Remember Me Checkbox Field -->
-                            <div class="column is-6">
-                                <label class="checkbox">
-                                    {{ form.remember_me(class_="checkbox") }} {{ form.remember_me.label }}</p>
-                                    <label>
-                            </div>
                             <div class="column is-2"></div>
                             <!-- Submit Button Field -->
                             <div class="column is-4">
@@ -71,5 +94,4 @@
     </div>
 </section>
 <!-- End Login Section -->
-
 {% endblock body %}

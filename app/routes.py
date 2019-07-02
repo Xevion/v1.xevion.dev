@@ -1,6 +1,6 @@
-from app import app
+from app import app, db
 from app.models import User
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
@@ -49,11 +49,19 @@ def index():
                for _ in range(10)]
     return render_template('index.html', content=content)
 
-@app.route('/signup')
-@app.route('/sign-up')
-def signup():
-    return render_template('signup.html', title='Sign Up', hideSignup=True)
-
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Registered Successfully!', 'info')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form, hideRegister=True)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,14 +71,14 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Invalid username or password', 'error')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form, hideLogin=True)
+    return render_template('login.html', title='Login', form=form, hideLogin=True)
 
 @app.route('/logout')
 def logout():
@@ -95,6 +103,9 @@ def validate_id(id):
     val = str(app.config['HIDDEN_URL']).strip()
     return id == val
 
+def get_hidden():
+    return "/hidden{}/".format(app.config['HIDDEN_URL'])
+
 @app.route('/hidden<id>/help')
 @login_required
 def hidden_help(id):
@@ -103,7 +114,7 @@ def hidden_help(id):
     else:
         return 'error: bad id'
 
-@app.route('/hidden<id>')
+@app.route('/hidden<id>/')
 @login_required
 def hidden(id):
     if not validate_id(id):
@@ -124,7 +135,7 @@ def hidden(id):
     showfull = boolparse(request.args.get('showfull'))
     showtags = boolparse(request.args.get('showtags'))
     # Request, Parse & Build Data
-    data = trap(tags, page-1, count, base64, showfull)
+    data = build_data(tags, page-1, count, base64, showfull)
     # Handling for limiters
     if base64:
         if showfull:
@@ -139,7 +150,7 @@ def base64ify(url):
 gelbooru_api_url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags={}&pid={}&limit={}"
 gelbooru_view_url = "https://gelbooru.com/index.php?page=post&s=view&id={}"
 
-def trap(tags, page, count, base64, showfull):
+def build_data(tags, page, count, base64, showfull):
     # URL Building & Request
     temp = gelbooru_api_url.format(tags, page, count)
     response = requests.get(temp).text

@@ -1,3 +1,21 @@
+{#
+Title = Title of the Message Box
+Text = Text inside the Message Box
+Color = Bulma Color Type of the Message Box    
+#}
+{% macro flash(title, text, color) -%}
+<article class="message is-small {{ color }}">
+    <div class="message-header">
+        <span class="fas fa-exclamation-triangle"></span>
+        {{ title }}
+        <button id="message-box-delete" class="delete" aria-label="delete"></button>
+    </div>
+    <div class="message-body">
+        {{ text }}
+    </div>
+</article>
+{%- endmacro %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +30,8 @@
     {% block head %}
     <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <style type="text/css">
         /* Single line word breaking for content */
@@ -23,6 +42,11 @@
         .raleway-font {
             font-family: 'Raleway', sans-serif;
             font-size: 1.75rem;
+        }
+
+        .is-vertical-center {
+            vertical-align: middle;
+            padding: 1rem;
         }
     </style>
     {% endblock head %}
@@ -53,25 +77,43 @@
             </div>
 
             <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        {% block navbarend %}
-                        {% if current_user.is_anonymous %}
+                {% block navbarend %}
+                <div id="navbar-dropdown" class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link is-mobile">
+                        <figure style="padding: 0.5rem;" class="image is-48x48">
+                            {% set default = 'https://via.placeholder.com/256' %}
+                            <img class=""
+                                src="{{ current_user.profile_picture or default if current_user.is_authenticated else default }}">
+                        </figure>
+                        <strong>
+                            Hello, {{ current_user.username if current_user.is_authenticated else 'Anonymous' }}
+                        </strong>
+                    </a>
 
-                        {% if not hideSignup %}
-                        <a href="{{ url_for('signup') }}" class="button is-outlined is-info">Signup</a>
-                        {% endif %}
-                        {% if not hideLogin %}
-                        <a href="{{ url_for('login') }}" class="button is-outlined is-info">Login</a>
-                        {% endif %}
-
+                    <div class="navbar-dropdown">
+                        {% if current_user.is_authenticated %}
+                        {# <a class="navbar-item" href="{{ url_for('profile') }}">
+                            Profile
+                        </a> #}
+                        <a class="navbar-item" href="{{ get_hidden() }}">
+                            Hidden
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item" href="{{ url_for('logout') }}">
+                            Logout
+                        </a>
                         {% else %}
-                        <a href="{{ url_for('logout') }}" class="button is-outlined is-info">Logout</a>
+                        <a class="navbar-item" href="{{ url_for('login') }}">
+                            Login
+                        </a>
+                        <a class="navbar-item" href="{{ url_for('register') }}">
+                            Register
+                        </a>
                         {% endif %}
 
-                        {% endblock navbarend %}
                     </div>
                 </div>
+                {% endblock navbarend %}
             </div>
         </div>
     </nav>
