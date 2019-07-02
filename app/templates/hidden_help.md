@@ -51,6 +51,7 @@ For some basic guidance, here are the tags for SFW and probably not SFW stuff:
 * `rating:questionable` Probably *not* SFW, but probably correct.
 
 The chain multiple tags, instead of space character like most sites use, you would chain them without a space, and instead use a `+` character.
+**Note:** The input box in the site will handle the `+` character natively, you do not have to chain them yourself.
 
 ##### Example
 
