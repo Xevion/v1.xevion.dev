@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(64))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    search_history = db.relationship('Search', backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -21,6 +22,15 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+class Search(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    query = db.Column(db.String(120))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.query if len(self.query) < 10 else self.query[:10] + '...')
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
