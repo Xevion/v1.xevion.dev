@@ -16,29 +16,31 @@ fake = faker.Faker()
 
 def strgen(length): return ''.join(random.choices(list(string.ascii_letters), k=length))
 
-def require_role(func, roles=[]):
-    def auth(*args, **kwargs):
-        if current_user.is_authenticated:
-            if current_user.has_roles(roles):
-                return func(*args, **kwargs)
-        return abort(401)
-    return auth
-
-@app.route('/api')
-@login_required
-@require_role
-def api():
-    return 'fuckoff'
+def require_role(roles=["User"]):
+    def wrap(func):
+        def run(*args, **kwargs):
+            if current_user.is_authenticated:
+                if current_user.has_roles(roles):
+                    return func(*args, **kwargs)
+            return abort(401)
+        return run
+    return wrap
 
 @app.errorhandler(401)
 def unauthorized(e):
     return redirect(url_for('login'))
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    return ''
+    render_template('dashboard.html')
 
-@app.route('/userinfo')
+@app.route('/profile/')
+@login_required
+def profile():
+    render_template('profile.html')
+
+@app.route('/userinfo/')
 def user_info():
     prepare = {
         'id' : current_user.get_id(),
@@ -63,7 +65,7 @@ def index():
                for _ in range(10)]
     return render_template('index.html', content=content)
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -77,7 +79,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form, hideRegister=True)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -94,7 +96,7 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form, hideLogin=True)
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     logout_user()
     return redirect(url_for('index'))
