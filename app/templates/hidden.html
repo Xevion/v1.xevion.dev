@@ -78,13 +78,16 @@
                                         {% if showtags %}checked{% endif %} />
                                 </div>
                                 <div class="columns is-centered">
-                                    <div class="column is-4">
-                                        <input class="button" type="submit" />
+                                    <div class="column">
+                                        <input class="button is-success is-outlined" type="submit" />
                                     </div>
-                                    <div class="column is-5"></div>
+                                    <div class="column">
+                                        <a class="button is-link is-outlined"
+                                            href="{{ request.path + 'history' }}">History</a>
+                                    </div>
                                     <div class="column">
                                         <a class="button is-info is-outlined"
-                                            href="{{ request.path + '/help' }}">Help</a>
+                                            href="{{ request.path + 'help' }}">Help</a>
                                     </div>
                                 </div>
                             </form>

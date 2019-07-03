@@ -106,19 +106,26 @@ def validate_id(id):
 def get_hidden():
     return "/hidden{}/".format(app.config['HIDDEN_URL'])
 
+@app.route('/hidden<id>/history')
+@login_required
+def hidden_history(id):
+    if not validate_id(id):
+        return '<span style="color: red;">error:</span> bad id'
+    return render_template('hidden_history.html')
+
+
 @app.route('/hidden<id>/help')
 @login_required
 def hidden_help(id):
-    if validate_id(id):
-        return render_template('hidden_help.html')
-    else:
-        return 'error: bad id'
+    if not validate_id(id):
+        return '<span style="color: red;">error:</span> bad id'
+    return render_template('hidden_help.html')
 
 @app.route('/hidden<id>/')
 @login_required
 def hidden(id):
     if not validate_id(id):
-        return 'bad id'
+        return '<span style="color: red;">error:</span> bad id'
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
@@ -142,6 +149,10 @@ def hidden(id):
             count = min(25, count)
         else:
             count = min(50, count)
+    print(request.args)
+    # search = Search(query=)
+    # db.session.add(search)
+    # db.session.commit()
     return render_template('hidden.html', title='Gelbooru Browser', data=data, tags=tags, page=page, count=count, base64=base64, showfull=showfull, showtags=showtags)
 
 def base64ify(url):

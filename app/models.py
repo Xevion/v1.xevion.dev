@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
 
 class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    exact_url = db.Column(db.String(160))
     query = db.Column(db.String(120))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
