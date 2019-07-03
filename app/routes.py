@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import User
+from app.models import User, Search
 from app.forms import LoginForm, RegistrationForm
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify
@@ -149,10 +149,10 @@ def hidden(id):
             count = min(25, count)
         else:
             count = min(50, count)
-    print(request.args)
-    # search = Search(query=)
-    # db.session.add(search)
-    # db.session.commit()
+    # print(type(jsonify(request.args.to_dict())))
+    search = Search(user_id=current_user.id, exact_url=str(request.url), query_args=json.dumps(request.args.to_dict()))
+    db.session.add(search)
+    db.session.commit()
     return render_template('hidden.html', title='Gelbooru Browser', data=data, tags=tags, page=page, count=count, base64=base64, showfull=showfull, showtags=showtags)
 
 def base64ify(url):

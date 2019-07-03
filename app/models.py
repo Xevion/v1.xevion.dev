@@ -26,12 +26,13 @@ class User(UserMixin, db.Model):
 class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     exact_url = db.Column(db.String(160))
-    query = db.Column(db.String(120))
+    query_args = db.Column(db.String(120))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.query if len(self.query) < 10 else self.query[:10] + '...')
+        return '<Search by {} @ {}>'.format(User.query.filter_by(id=self.user_id).first().username, self.timestamp)
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
