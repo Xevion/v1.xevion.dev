@@ -1,8 +1,8 @@
-from app import app, db
+from app import app, db, login
 from app.models import User, Search
 from app.forms import LoginForm, RegistrationForm
 from werkzeug.urls import url_parse
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, abort
 from flask_login import current_user, login_user, logout_user, login_required
 import requests
 import xmltodict
@@ -16,16 +16,29 @@ fake = faker.Faker()
 
 def strgen(length): return ''.join(random.choices(list(string.ascii_letters), k=length))
 
+def require_role(func, roles=[]):
+    def auth(*args, **kwargs):
+        if current_user.is_authenticated:
+            if current_user.has_roles(roles):
+                return func(*args, **kwargs)
+        return abort(401)
+    return auth
+
 @app.route('/api')
+@login_required
+@require_role
 def api():
     return 'fuckoff'
+
+@app.errorhandler(401)
+def unauthorized(e):
+    return redirect(url_for('login'))
 
 @app.route('/dashboard')
 def dashboard():
     return ''
 
 @app.route('/userinfo')
-@login_required
 def user_info():
     prepare = {
         'id' : current_user.get_id(),
@@ -35,7 +48,8 @@ def user_info():
         'is_active' : current_user.is_active,
         'is_anonymous' : current_user.is_anonymous,
         'is_authenticated' : current_user.is_authenticated,
-        'metadata' : current_user.metadata.info
+        'metadata' : current_user.metadata.info,
+        'uroles' : current_user.get_roles()
     }
     return jsonify(prepare)
 

@@ -20,7 +20,7 @@
                                     <th><abbr title="Search ID">ID</abbr></th>
                                     <th>Exact URL</th>
                                     <th>Query Arguments</th>
-                                    <th><abbr title="in UTC time">Timestamp</abbr></th>
+                                    <th>Timestamp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -29,7 +29,7 @@
                                     <td>{{ post.id }}</td>
                                     <td>{{ post.exact_url }}</td>
                                     <td>{{ post.query_args }}</td>
-                                    <td>{{ post.timestamp }} </td>
+                                    <td>{{ post.timestamp }} UTC</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
