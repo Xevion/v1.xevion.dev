@@ -33,12 +33,12 @@ def unauthorized(e):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    render_template('dashboard.html')
+    return render_template('dashboard.html')
 
 @app.route('/profile/')
 @login_required
 def profile():
-    render_template('profile.html')
+    return render_template('profile.html')
 
 @app.route('/userinfo/')
 def user_info():

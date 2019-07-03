@@ -50,6 +50,15 @@ Color = Bulma Color Type of the Message Box
         }
     </style>
     {% endblock head %}
+    <style type="text/css">
+        .navbar-text {
+            font-size: 110%;
+        }
+
+        .navbar-fa-icon {
+            margin-right: 0.35rem;
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-divider@2.0.1/dist/css/bulma-divider.min.css">
 </head>
 
@@ -92,22 +101,34 @@ Color = Bulma Color Type of the Message Box
 
                     <div class="navbar-dropdown">
                         {% if current_user.is_authenticated %}
-                        {# <a class="navbar-item" href="{{ url_for('profile') }}">
-                            Profile
-                        </a> #}
-                        <a class="navbar-item" href="{{ get_hidden() }}">
+                        <a class="navbar-item" href="{{ url_for('profile') }}">
+                            <span class="navbar-fa-icon fas fa-user"></span>
+                            <div class="navbar-text">Profile</div>
+                        </a>
+                        <a class="navbar-item" href="{{ url_for('dashboard') }}">
+                            <span class="navbar-fa-icon fas fa-user-cog"></span>
+                            <div class="navbar-text">Dashboard</div>
+                        </a>
+                        <hr class="navbar-divider">
+                        {% if current_user.has_roles(['Hidden']) %}
+                        <a class="navbar-item" href="{{ get_hidden() }}">                            
+                            <span class="navbar-fa-icon fas fa-user-ninja"></span>
                             Hidden
                         </a>
                         <hr class="navbar-divider">
+                        {% endif %}
                         <a class="navbar-item" href="{{ url_for('logout') }}">
-                            Logout
+                            <span class="navbar-fa-icon fas fa-power-off"></span>
+                            <div class="navbar-text">Logout</div>
                         </a>
                         {% else %}
                         <a class="navbar-item" href="{{ url_for('login') }}">
-                            Login
+                            <span class="navbar-fa-icon fas fa-arrow-circle-right"></span>
+                            <div class="navbar-text">Login</div>
                         </a>
                         <a class="navbar-item" href="{{ url_for('register') }}">
-                            Register
+                            <span class="navbar-fa-icon fas fa-clipboard-list"></span>
+                            <div class="navbar-text">Register</div>
                         </a>
                         {% endif %}
 
