@@ -15,5 +15,6 @@ login.login_view = 'login'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from app import routes, models
+from app import models
+from app import routes, dashboard, custom
 app.jinja_env.globals.update(get_hidden=routes.get_hidden)

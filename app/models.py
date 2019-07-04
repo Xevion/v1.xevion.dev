@@ -1,18 +1,9 @@
+from flask import abort
 from flask_login import UserMixin
 from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 
-def require_role(roles=["User"]):
-    def wrap(func):
-        @wraps(func)
-        def decorated_view(*args, **kwargs):
-            if current_user.is_authenticated:
-                if current_user.has_roles(roles):
-                    return func(*args, **kwargs)
-            return abort(401)
-        return decorated_view
-    return wrap
 @login.user_loader
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

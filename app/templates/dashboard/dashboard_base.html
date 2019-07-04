@@ -8,7 +8,7 @@
             </p>
             <ul class="menu-list">
                 <li><a href="{{ url_for('dashboard') }}" {% if dashboard_home_active %}class="is-active"{% endif %}>Home</a></li>
-                <li><a href="{{ url_for('profile_settings') }}" {% if dashboard_profile_settings_active %}class="is-active"{% endif %}>Profile Settings</a></li>
+                <li><a href="{{ url_for('profile_settings') }}" {% if profile_settings_active %}class="is-active"{% endif %}>Profile Settings</a></li>
             </ul>
             <ul class="menu-list">
                 
@@ -19,7 +19,7 @@
             <ul class="menu-list">
                 <li><a href="{{ url_for('constants') }}" {% if constants_active %}class="is-active"{% endif %}>Constants</a></li>
                 <li>
-                    <a {% if role_settings_active %}class="is-active"{% endif %}><abbr title="Role Based Access Control">RBAC</abbr> Settings</a>
+                    <a href="{{ url_for('rbac') }}" {% if role_settings_active %}class="is-active"{% endif %}>RBAC Settings</a>
                     <ul>
                         <li><a href="{{ url_for('rbac') + '#apply-user-roles' }}">Apply Roles to User(s)</a></li>
                         <li><a href="{{ url_for('rbac') + '#view-user-roles' }}">View all Roles</a></li>

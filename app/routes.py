@@ -1,10 +1,10 @@
 from app import app, db, login
-from app.models import User, Search, require_role
+from app.models import User, Search
 from app.forms import LoginForm, RegistrationForm
+from app.custom import require_role
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify, abort
 from flask_login import current_user, login_user, logout_user, login_required
-from functools import wraps
 import requests
 import xmltodict
 import base64
@@ -20,11 +20,6 @@ def strgen(length): return ''.join(random.choices(list(string.ascii_letters), k=
 @app.errorhandler(401)
 def unauthorized(e):
     return redirect(url_for('login'))
-
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('/dashboard/dashboard.html')
 
 @app.route('/profile/')
 @login_required
