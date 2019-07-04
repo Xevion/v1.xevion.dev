@@ -77,14 +77,18 @@
                                     <input type="checkbox" name="showtags" value="true"
                                         {% if showtags %}checked{% endif %} />
                                 </div>
-                                <div class="columns is-centered">
+                                <div class="columns is-centered {% if current_user.has_roles(['Admin']) %}is-4{% endif %}">
                                     <div class="column">
                                         <input class="button is-success is-outlined" type="submit" />
                                     </div>
+                                    {% if current_user.has_roles(['Admin']) %}
                                     <div class="column">
-                                        <a class="button is-link is-outlined"
-                                            href="{{ request.path + 'history' }}">History</a>
-                                    </div>
+                                            <a class="button is-link is-outlined"
+                                                href="{{ request.path + 'history' }}">History</a>
+                                        </div>    
+                                    {% else %}
+                                    <div class="column is-5"></div>
+                                    {% endif %}
                                     <div class="column">
                                         <a class="button is-info is-outlined"
                                             href="{{ request.path + 'help' }}">Help</a>
