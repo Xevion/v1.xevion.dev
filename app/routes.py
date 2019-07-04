@@ -44,8 +44,7 @@ def user_info():
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        print(current_user)
-    content = [{'text': fake.paragraph(nb_sentences=15),
+        content = [{'text': fake.paragraph(nb_sentences=15),
                 'seed': random.randint(0, 1000),
                 'title': fake.word().title()}
                for _ in range(10)]
@@ -127,7 +126,7 @@ def hidden_help(id):
 
 @app.route('/hidden<id>/')
 @login_required
-# @require_role(roles=['Hidden'])
+@require_role(roles=['Hidden'])
 def hidden(id):
     if not validate_id(id):
         return '<span style="color: red;">error:</span> bad id'
@@ -154,7 +153,6 @@ def hidden(id):
             count = min(25, count)
         else:
             count = min(50, count)
-    # print(type(jsonify(request.args.to_dict())))
     search = Search(user_id=current_user.id, exact_url=str(request.url), query_args=json.dumps(request.args.to_dict()))
     db.session.add(search)
     db.session.commit()
