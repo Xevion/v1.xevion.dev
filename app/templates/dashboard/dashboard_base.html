@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block body %}
+<div style="margin-left: 1rem; margin-top: 1rem;" class="columns">
+    <div class="column is-2">
+        <aside class="menu">
+            <p class="menu-label">
+                Dashboard
+            </p>
+            <ul class="menu-list">
+                <li><a href="{{ url_for('dashboard') }}" {% if dashboard_home_active %}class="is-active"{% endif %}>Home</a></li>
+                <li><a href="{{ url_for('profile_settings') }}" {% if dashboard_profile_settings_active %}class="is-active"{% endif %}>Profile Settings</a></li>
+            </ul>
+            <ul class="menu-list">
+                
+            </ul>
+            <p class="menu-label">
+                Administration
+            </p>
+            <ul class="menu-list">
+                <li><a href="{{ url_for('constants') }}" {% if constants_active %}class="is-active"{% endif %}>Constants</a></li>
+                <li>
+                    <a {% if role_settings_active %}class="is-active"{% endif %}><abbr title="Role Based Access Control">RBAC</abbr> Settings</a>
+                    <ul>
+                        <li><a href="{{ url_for('rbac') + '#apply-user-roles' }}">Apply Roles to User(s)</a></li>
+                        <li><a href="{{ url_for('rbac') + '#view-user-roles' }}">View all Roles</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+    </div>
+    <div class="column">
+    {% block dashboard_body %}
+    
+    {% endblock dashboard_body %}
+    </div>
+</div>
+{% endblock body %}

@@ -1,9 +1,10 @@
 from app import app, db, login
-from app.models import User, Search
+from app.models import User, Search, require_role
 from app.forms import LoginForm, RegistrationForm
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify, abort
 from flask_login import current_user, login_user, logout_user, login_required
+from functools import wraps
 import requests
 import xmltodict
 import base64
@@ -16,16 +17,6 @@ fake = faker.Faker()
 
 def strgen(length): return ''.join(random.choices(list(string.ascii_letters), k=length))
 
-def require_role(roles=["User"]):
-    def wrap(func):
-        def run(*args, **kwargs):
-            if current_user.is_authenticated:
-                if current_user.has_roles(roles):
-                    return func(*args, **kwargs)
-            return abort(401)
-        return run
-    return wrap
-
 @app.errorhandler(401)
 def unauthorized(e):
     return redirect(url_for('login'))
@@ -33,7 +24,7 @@ def unauthorized(e):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('/dashboard/dashboard.html')
 
 @app.route('/profile/')
 @login_required
@@ -68,7 +59,7 @@ def index():
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('dashboard'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -82,7 +73,7 @@ def register():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -124,6 +115,7 @@ def get_hidden():
 
 @app.route('/hidden<id>/history')
 @login_required
+@require_role(roles=['Hidden', 'Admin'])
 def hidden_history(id):
     if not validate_id(id):
         return '<span style="color: red;">error:</span> bad id'
@@ -132,6 +124,7 @@ def hidden_history(id):
 
 @app.route('/hidden<id>/help')
 @login_required
+@require_role(roles=['Hidden'])
 def hidden_help(id):
     if not validate_id(id):
         return '<span style="color: red;">error:</span> bad id'
@@ -139,6 +132,7 @@ def hidden_help(id):
 
 @app.route('/hidden<id>/')
 @login_required
+# @require_role(roles=['Hidden'])
 def hidden(id):
     if not validate_id(id):
         return '<span style="color: red;">error:</span> bad id'
