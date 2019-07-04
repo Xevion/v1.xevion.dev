@@ -5,7 +5,7 @@
 <script>
     $(document).ready(function () {
         $('form').submit(function (e) {
-            var url = "{# { url_for('something') } #}"; // send the form data here.
+            var url = "{{ url_for('profile_settings_submit') }}"; // send the form data here.
             $.ajax({
                 type: "POST",
                 url: url,
@@ -20,7 +20,7 @@
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", "{#{ form.csrf_token._value() }#}")
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
                 }
             }
         })
@@ -30,8 +30,13 @@
 {% block dashboard_body %}
 <section>
     <h1 class="title">Profile Settings</h1>
-    <span>
-        form goes here nibba
-    </span>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="field">
+            {{ form.show_email.label }}
+            {{ form.show_email(class="_input") }}
+        </div>
+        {{ form.submit }}
+    </form>
 </section>
 {% endblock dashboard_body %}

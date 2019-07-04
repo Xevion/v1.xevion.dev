@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField
 from wtforms.validators import ValidationError, DataRequired, EqualTo, Email
 from app.models import User
 
@@ -27,4 +27,5 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email address is not available.')
 
 class ProfileSettingsForm(FlaskForm):
-    show_email = BooleanField('Show ')
+    show_email = RadioField('Show Email', choices=[('p', 'Public'), ('r', 'Registered Users Only'), ('h', 'Hidden')])
+    submit = SubmitField('Save Profile Settings')
