@@ -43,8 +43,7 @@ def user_info():
 
 @app.route('/')
 def index():
-    if current_user.is_authenticated:
-        content = [{'text': fake.paragraph(nb_sentences=15),
+    content = [{'text': fake.paragraph(nb_sentences=15),
                 'seed': random.randint(0, 1000),
                 'title': fake.word().title()}
                for _ in range(10)]
