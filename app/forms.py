@@ -27,5 +27,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email address is not available.')
 
 class ProfileSettingsForm(FlaskForm):
-    show_email = RadioField('Show Email', choices=[('p', 'Public'), ('r', 'Registered Users Only'), ('h', 'Hidden')])
+    show_email = RadioField('Show Email', default='registered', choices=[('public', 'Public'), ('registered', 'Registered Users Only'), ('hidden', 'Hidden')])
+    profile_picture_file = FileField('Upload Profile Picture')
     submit = SubmitField('Save Profile Settings')
+
