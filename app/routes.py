@@ -15,7 +15,8 @@ import json
 
 fake = faker.Faker()
 
-def strgen(length): return ''.join(random.choices(list(string.ascii_letters), k=length))
+def strgen(length):
+    return ''.join(random.choices(list(string.ascii_letters), k=length))
 
 @app.errorhandler(401)
 def unauthorized(e):
@@ -25,6 +26,10 @@ def unauthorized(e):
 @login_required
 def profile():
     return render_template('profile.html')
+
+@app.route('/api/')
+def api():
+    return 'fuckoff bots'
 
 @app.route('/userinfo/')
 def user_info():

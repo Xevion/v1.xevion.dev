@@ -21,8 +21,13 @@ def profile_settings():
 def profile_settings_submit():
     form = ProfileSettingsForm()
     if form.validate_on_submit():
-        return jsonify(data={'message' : 'hello {}'.format(form.show_email.data)})
-    return '$'
+        data = {
+            'show_email' : form.show_email.data or None,
+            'profile_picture_file' : request.files
+        }
+        return jsonify(data=data)
+    return '{}'
+
 @app.route('/dashboard/constants')
 @login_required
 @require_role(roles=['Admin'])

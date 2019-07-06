@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField
-from wtforms.validators import ValidationError, DataRequired, EqualTo, Email
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, FileField
+from wtforms.validators import ValidationError, DataRequired, EqualTo, Email, URL
 from app.models import User
 
 class LoginForm(FlaskForm):
@@ -28,6 +28,10 @@ class RegistrationForm(FlaskForm):
 
 class ProfileSettingsForm(FlaskForm):
     show_email = RadioField('Show Email', default='registered', choices=[('public', 'Public'), ('registered', 'Registered Users Only'), ('hidden', 'Hidden')])
-    profile_picture_file = FileField('Upload Profile Picture')
+    
     submit = SubmitField('Save Profile Settings')
 
+class ProfilePictureForm(FlaskForm):
+    profile_picture_file = FileField('Upload Profile Picture')
+    profile_picture_url = StringField('Use URL for Profile Picture', validators=[URL()])
+    submit = SubmitField('Submit Profile Picture')

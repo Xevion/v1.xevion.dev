@@ -8,10 +8,12 @@
             </p>
             <ul class="menu-list">
                 <li><a href="{{ url_for('dashboard') }}" {% if dashboard_home_active %}class="is-active"{% endif %}>Home</a></li>
-                <li><a href="{{ url_for('profile_settings') }}" {% if profile_settings_active %}class="is-active"{% endif %}>Profile Settings</a></li>
             </ul>
+            <p class="menu-label">
+                Settings
+            </p>
             <ul class="menu-list">
-                
+                <li><a href="{{ url_for('profile_settings') }}" {% if profile_settings_active %}class="is-active"{% endif %}>Profile Settings</a></li>
             </ul>
             <p class="menu-label">
                 Administration
@@ -28,7 +30,8 @@
             </ul>
         </aside>
     </div>
-    <div class="column">
+    <div class="column"></div>
+    <div class="column is-two-thirds">
     {% block dashboard_body %}
     
     {% endblock dashboard_body %}
