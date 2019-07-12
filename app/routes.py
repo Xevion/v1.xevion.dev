@@ -44,15 +44,7 @@ def create_panzer(string):
     draw.text((10, 20), 'Oh panzer of the lake, what is your wisdom?', font=font1)
 
     font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
-    
-    w, h = img.size
-    lines = wrap(string, width=400)
-    y_text = h
-    for line in lines:
-        width, height = font2.getsize(line)
-        draw.text(((w - width) / 2, y_text), line, font=font2)
-        y_text += height
-    # draw.text((250, 500), string, font=font2)
+    draw.text((250, 500), string, font=font2)
     return img
 
 
