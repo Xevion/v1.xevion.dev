@@ -6,6 +6,7 @@ from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file
 from flask_login import current_user, login_user, logout_user, login_required
 from io import BytesIO
+from textwrap import wrap
 from PIL import Image, ImageDraw, ImageFont
 import requests
 import xmltodict
@@ -17,8 +18,7 @@ import json
 
 fake = faker.Faker()
 
-def strgen(length):
-    return ''.join(random.choices(list(string.ascii_letters), k=length))
+strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
 
 @app.errorhandler(401)
 def unauthorized(e):
@@ -41,9 +41,18 @@ def create_panzer(string):
     img = Image.open("./app/static/panzer.jpeg")
     draw = ImageDraw.Draw(img)
     font1 = ImageFont.truetype('./app/static/arial.ttf', size=30)
-    font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
     draw.text((10, 20), 'Oh panzer of the lake, what is your wisdom?', font=font1)
-    draw.text((250, 500), string, font=font2)
+
+    font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
+    
+    w, h = img.size
+    lines = wrap(string, width=400)
+    y_text = h
+    for line in lines:
+        width, height = font2.getsize(line)
+        draw.text(((w - width) / 2, y_text), line, font=font2)
+        y_text += height
+    # draw.text((250, 500), string, font=font2)
     return img
 
 
@@ -57,6 +66,8 @@ def api():
     return 'fuckoff bots'
 
 @app.route('/userinfo/')
+@login_required
+@require_role(roles=['Admin'])
 def user_info():
     prepare = {
         'id' : current_user.get_id(),
@@ -73,10 +84,14 @@ def user_info():
 
 @app.route('/')
 def index():
-    content = [{'text': fake.paragraph(nb_sentences=15),
+    # content = [{'text': fake.paragraph(nb_sentences=15),
+    #             'seed': random.randint(0, 1000),
+    #             'title': fake.word().title()}
+    #            for _ in range(0)]
+    content = [{'title': 'Work in Progress',
                 'seed': random.randint(0, 1000),
-                'title': fake.word().title()}
-               for _ in range(10)]
+                'text': 'This portion of my website is still a work in progress. I don\'t know if and when it\'ll be done, or how it will turn out in the end. - Xevion @ (Jul-11-2019)'}
+               for _ in range(1)]
     return render_template('index.html', content=content)
 
 @app.route('/register/', methods=['GET', 'POST'])

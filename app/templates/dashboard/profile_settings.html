@@ -4,7 +4,7 @@
 {{ super() }}
 <script>
     $(document).ready(function () {
-        $('#form-ajax').submit(function (e) {
+        $('#psform-ajax').submit(function (e) {
             var url = "{{ url_for('profile_settings_submit') }}"; // send the form data here.
             $.ajax({
                 type: "POST",
@@ -20,12 +20,17 @@
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                    xhr.setRequestHeader("X-CSRFToken", "{{ psform.csrf_token._value() }}")
                 }
             }
         })
     });
 </script>
+<style type="text/css">
+    .tab-left {
+        padding-left: 3rem;
+    }
+</style>
 <style type="text/css">
     .tab-left {
         padding-left: 3rem;
@@ -38,17 +43,17 @@
     <h1 class="title">Profile Settings</h1>
     <!-- Profile Email Settings Form -->
     <form class="form-ajax" action="" method="POST" novalidate>
-        {{ form.hidden_tag() }}
+        {{ psform.hidden_tag() }}
         <div class="field tab-left">
-            <h4 class="title is-4">{{ form.show_email.label }}</h4>
-            {{ form.show_email(class="radio") }}
+            <h4 class="title is-4">{{ psform.show_email.label }}</h4>
+            {{ psform.show_email(class="radio") }}
         </div>
     </form>
     <!-- Profile Picture Form -->
     <form class="form-ajax" action="" method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <h4 class="title is-4">{{ form.profile_picture_file.label }}</h4>
-        {{ form.profile_picture_file(class="") }}
+        {{ ppform.hidden_tag() }}
+        <h4 class="title is-4">{{ ppform.profile_picture_file.label }}</h4>
+        {{ ppform.profile_picture_file(class="") }}
         <div class="field tab-left">
             <div class="file">
                 <label class="file-label">
@@ -65,7 +70,7 @@
             </div>
         </div>
 
-        {{ form.submit(class="button is-danger") }}
+        {{ ppform.submit(class="button is-danger") }}
     </form>
 </section>
 {% endblock dashboard_body %}

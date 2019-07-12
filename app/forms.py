@@ -28,7 +28,6 @@ class RegistrationForm(FlaskForm):
 
 class ProfileSettingsForm(FlaskForm):
     show_email = RadioField('Show Email', default='registered', choices=[('public', 'Public'), ('registered', 'Registered Users Only'), ('hidden', 'Hidden')])
-    
     submit = SubmitField('Save Profile Settings')
 
 class ProfilePictureForm(FlaskForm):

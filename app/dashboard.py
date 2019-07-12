@@ -1,5 +1,5 @@
 from app import app, db, login
-from app.forms import ProfileSettingsForm
+from app.forms import ProfileSettingsForm, ProfilePictureForm
 from app.models import User, Search
 from app.custom import require_role
 from flask import render_template, redirect, url_for, request, jsonify
@@ -13,8 +13,9 @@ def dashboard():
 @app.route('/dashboard/profile_settings', methods=['GET'])
 @login_required
 def profile_settings():
-    form = ProfileSettingsForm()
-    return render_template('/dashboard/profile_settings.html', form=form)
+    psform = ProfileSettingsForm()
+    ppform = ProfilePictureForm()
+    return render_template('/dashboard/profile_settings.html', psform=psform, ppform=ppform)
 
 @app.route('/dashboard/profile_settings/submit', methods=['POST'])
 @login_required
