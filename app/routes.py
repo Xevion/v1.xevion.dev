@@ -31,6 +31,8 @@ def serve_pil_image(pil_img):
     return send_file(img_io, mimetype='image/jpeg')
 
 @app.route('/panzer/')
+@app.route('/panzer')
+@app.route('/panzer/<string>')
 @app.route('/panzer/<string>/')
 def panzer(string='bionicles are cooler than sex'):
     string = string.replace('+', ' ')
