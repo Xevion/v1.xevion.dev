@@ -31,7 +31,7 @@ def serve_pil_image(pil_img):
     return send_file(img_io, mimetype='image/jpeg')
 
 @app.route('/panzer/')
-@app.route('/panzer/<string>')
+@app.route('/panzer/<string>/')
 def panzer(string='bionicles are cooler than sex'):
     string = string.replace('+', ' ')
     image = create_panzer(string)
@@ -42,9 +42,11 @@ def create_panzer(string):
     draw = ImageDraw.Draw(img)
     font1 = ImageFont.truetype('./app/static/arial.ttf', size=30)
     draw.text((10, 20), 'Oh panzer of the lake, what is your wisdom?', font=font1)
-
     font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
-    draw.text((250, 500), string, font=font2)
+    topleft = (250, 500)
+    wrapped = wrap(string, width=25)
+    for y, text in enumerate(wrapped):
+        draw.text((topleft[0], topleft[1] + (y * 33)), text, font=font2)
     return img
 
 
