@@ -15,7 +15,9 @@ import random
 import string
 import faker
 import json
+import pprint
 
+print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
 
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
@@ -36,6 +38,7 @@ def serve_pil_image(pil_img):
 @app.route('/panzer/<string>/')
 def panzer(string='bionicles are cooler than sex'):
     string = string.replace('+', ' ')
+    string = string.replace('\n', '%0A')
     image = create_panzer(string)
     return serve_pil_image(image)
 
@@ -47,6 +50,7 @@ def create_panzer(string):
     font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
     topleft = (250, 500)
     wrapped = wrap(string, width=25)
+    wrapped = [text.replace('%0A', '\n') for text in wrapped]
     for y, text in enumerate(wrapped):
         draw.text((topleft[0], topleft[1] + (y * 33)), text, font=font2)
     return img
