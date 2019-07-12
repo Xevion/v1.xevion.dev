@@ -28,16 +28,17 @@ class User(UserMixin, db.Model):
     
     # Retains order while making sure that there are no duplicate role values and they are capitalized 
     def post_role_processing(self):
-        user_roles = self.uroles.split(' ')
+        user_roles = self.get_roles()
         user_roles = list(dict.fromkeys(user_roles))
         self.uroles = ' '.join([role.title() for role in user_roles])
-
+        self.uroles = self.uroles.strip()
+        
     def delete_role(self, role):
         return self.delete_roles([role])
 
     # Will return True if successful, else False if a role didn't exist
     def delete_roles(self, roles, ignore=True):
-        user_roles = self.uroles.split(' ')
+        user_roles = self.get_roles()
         success = True
         for role in roles:
             try:
@@ -48,15 +49,14 @@ class User(UserMixin, db.Model):
                 success = False
         return success
                 
-            
     def get_roles(self):
-        return self.uroles.split(' ')
+        return [] if len(self.uroles) == 0 else self.uroles.split(' ')
 
     def add_role(self, role):
         self.add_roles([role])
 
     def add_roles(self, roles, postprocess=True):
-        user_roles = self.uroles.split(' ')
+        user_roles = self.get_roles()
         if type(roles) == str:
             user_roles.append(roles)
         elif type(roles) == list:
@@ -72,7 +72,7 @@ class User(UserMixin, db.Model):
     # Input: ['Insane', ['Fortunate', 'Blessed']]
     # Meaning: Must have 'Insane' role, as well as 'Fortunate' or 'Blessed' roles.
     def has_roles(self, roles):
-        user_roles = self.uroles.split(' ')
+        user_roles = self.get_roles()
         for reqrole in roles:
             # If we have this role
             if type(reqrole) == str:
