@@ -4,6 +4,9 @@ from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# Just a note, my role system is really quite terrible, but I've implemented as good as a system as I can for a simple RBAC without Hierarchy.
+# Once could create a complex system, but it would be better to properly work with SQLAlchemy to create proper permissions, hierarchy, parent/child etc. rather than to work with simple strings.
+# One should look into perhaps Pickled Pytthon objects if they were interested in simplfiying interactions while opening a lot more data storage.
 @login.user_loader
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,7 +35,7 @@ class User(UserMixin, db.Model):
         user_roles = list(dict.fromkeys(user_roles))
         self.uroles = ' '.join([role.title() for role in user_roles])
         self.uroles = self.uroles.strip()
-        
+
     def delete_role(self, role):
         return self.delete_roles([role])
 
@@ -50,7 +53,7 @@ class User(UserMixin, db.Model):
         return success
                 
     def get_roles(self):
-        return [] if len(self.uroles) == 0 else self.uroles.split(' ')
+        return self.uroles.split(' ')
 
     def add_role(self, role):
         self.add_roles([role])
