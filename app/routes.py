@@ -3,8 +3,10 @@ from app.models import User, Search
 from app.forms import LoginForm, RegistrationForm
 from app.custom import require_role
 from werkzeug.urls import url_parse
-from flask import render_template, redirect, url_for, flash, request, jsonify, abort
+from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file
 from flask_login import current_user, login_user, logout_user, login_required
+from io import BytesIO
+from PIL import Image, ImageDraw, ImageFont
 import requests
 import xmltodict
 import base64
@@ -21,6 +23,29 @@ def strgen(length):
 @app.errorhandler(401)
 def unauthorized(e):
     return redirect(url_for('login'))
+
+def serve_pil_image(pil_img):
+    img_io = BytesIO()
+    pil_img.save(img_io, 'JPEG', quality=50)
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/jpeg')
+
+@app.route('/panzer/')
+@app.route('/panzer/<string>')
+def panzer(string='bionicles are cooler than sex'):
+    string = string.replace('+', ' ')
+    image = create_panzer(string)
+    return serve_pil_image(image)
+
+def create_panzer(string):
+    img = Image.open("./app/static/panzer.jpeg")
+    draw = ImageDraw.Draw(img)
+    font1 = ImageFont.truetype('./app/static/arial.ttf', size=30)
+    font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
+    draw.text((10, 20), 'Oh panzer of the lake, what is your wisdom?', font=font1)
+    draw.text((250, 500), string, font=font2)
+    return img
+
 
 @app.route('/profile/')
 @login_required

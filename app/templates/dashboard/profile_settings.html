@@ -27,21 +27,25 @@
     });
 </script>
 <style type="text/css">
-.tab-left {
-    padding-left: 3rem;
-}
+    .tab-left {
+        padding-left: 3rem;
+    }
 </style>
 {% endblock head %}
+
 {% block dashboard_body %}
 <section>
     <h1 class="title">Profile Settings</h1>
+    <!-- Profile Email Settings Form -->
     <form class="form-ajax" action="" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <div class="field tab-left">
             <h4 class="title is-4">{{ form.show_email.label }}</h4>
-            {{ form.show_email() }}
+            {{ form.show_email(class="radio") }}
         </div>
-
+    </form>
+    <!-- Profile Picture Form -->
+    <form class="form-ajax" action="" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <h4 class="title is-4">{{ form.profile_picture_file.label }}</h4>
         {{ form.profile_picture_file(class="") }}
@@ -59,7 +63,6 @@
                     </span>
                 </label>
             </div>
-            
         </div>
 
         {{ form.submit(class="button is-danger") }}
