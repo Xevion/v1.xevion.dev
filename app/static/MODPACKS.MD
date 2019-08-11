@@ -18,6 +18,16 @@ Mid-Late Game. In-progress.
 
 ## Completed Modpacks
 
+### FTB Unleashed
+
+Played with a friend. Lived the greentop cave base life. All was good.
+
+It's a simple modpack, not much to say about it. I enjoyed using MFR and learning AE1 after a while.
+
+It got laggy after a while and I quit after we basically "completed" the modpack with a modest squid power gen and quarry.
+
+No questing, so it's not like there was a place for me to say "We're done", other than our personal interests drawing the line.
+
 ### Direwolf20 1.12.2
 
 Basic modpack, nothing much to say. I experienced Refined Storage for the first time in this modpack. Good for beginners, I suppose.
