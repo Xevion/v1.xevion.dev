@@ -23,7 +23,7 @@ fake = faker.Faker()
 
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
 
-@app.route('/modpacks'):
+@app.route('/modpacks')
 def modpacks():
     return open(os.path.join(app.root_path, 'static', 'MODPACKS.MD'), 'r').read()
 
