@@ -8,6 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from io import BytesIO
 from textwrap import wrap
 from PIL import Image, ImageDraw, ImageFont
+import mistune
 import requests
 import xmltodict
 import base64
@@ -20,16 +21,17 @@ import os
 
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
+markdown = mistune.Markdown()
 
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
 
 @app.route('/modpacks')
 def modpacks():
-    return open(os.path.join(app.root_path, 'static', 'MODPACKS.MD'), 'r').read()
+    return markdown(open(os.path.join(app.root_path, 'static', 'MODPACKS.MD'), 'r').read())
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static', 'favicon.ico'), mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.errorhandler(401)
 def unauthorized(e):
