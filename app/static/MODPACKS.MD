@@ -12,7 +12,7 @@ Mid-Late Game. In-progress.
 
 ### Antimatter Chemistry
 
-Mid-Late Game. In-proress.
+Mid-Late Game. In-progress.
 
 ---
 
