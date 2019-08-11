@@ -3,7 +3,7 @@ from app.models import User, Search
 from app.forms import LoginForm, RegistrationForm
 from app.custom import require_role
 from werkzeug.urls import url_parse
-from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file
+from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from io import BytesIO
 from textwrap import wrap
@@ -16,11 +16,20 @@ import string
 import faker
 import json
 import pprint
+import os
 
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
 
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
+
+@app.route('/modpacks'):
+def modpacks():
+    return open(os.path.join(app.root_path, 'static', 'MODPACKS.MD'), 'r').read()
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static', 'favicon.ico'), mimetype='image/vnd.microsoft.icon')
 
 @app.errorhandler(401)
 def unauthorized(e):

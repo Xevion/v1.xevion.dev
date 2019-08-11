@@ -60,6 +60,8 @@ class User(UserMixin, db.Model):
 
     def add_roles(self, roles, postprocess=True):
         user_roles = self.get_roles()
+        # Ensure whitespace is replaced with a underscore
+        roles = ['_'.join(role.split()) for role in roles]
         if type(roles) == str:
             user_roles.append(roles)
         elif type(roles) == list:
