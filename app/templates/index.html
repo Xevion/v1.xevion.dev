@@ -1,4 +1,12 @@
 {% extends 'base.html' %}
+{% block head %}
+super()
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='github-activity-0.1.5.min.css') }}">
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='github-activity-0.1.5.min.js') }}"></script>
+{% endblock head %}
 {% block body %}
 <!-- Hero Section -->
 <section class="hero is-fullheight-with-navbar">
@@ -24,6 +32,23 @@
 	<div class="container">
 		{% if content %}
 		<div class="columns is-mobile is-multiline is-centered">
+
+			<!-- GitHub Activity Feed -->
+			<div class="column is-5">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-header-title">
+							GitHub Actviity
+						</div>
+					</div>
+					<div class="card-content">
+						<!-- GitHub Feed -->
+						<div class="feed">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End GitHub Activity Feed -->
 
 			{% for card in content %}
 			<div class="column is-5">
