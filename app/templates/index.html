@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
-super()
+{{ super() }}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='github-activity-0.1.5.min.css') }}">
 
@@ -43,7 +43,7 @@ super()
 					</div>
 					<div class="card-content">
 						<!-- GitHub Feed -->
-						<div class="feed">
+						<div id="feed">
 						</div>
 					</div>
 				</div>
@@ -78,4 +78,14 @@ super()
 	</div>
 </section>
 <!-- End Dynamic Content -->
+
+<script>
+GitHubActivity.feed({
+	username: "xevion",
+	repository: "xevion.dev",
+	selector: "#feed",
+	limit: 10 // optional
+});
+</script>
+
 {% endblock body %}
