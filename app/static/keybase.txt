@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/xevion
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://xevion.dev
+  * I am xevion (https://keybase.io/xevion) on keybase.
+  * I have a public key ASAm89LfSNcdbKWjNBgQHChPenOqyJRNxS7b_vF7uSNpYAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012026f3d2df48d71d6ca5a33418101c284f7a73aac8944dc52edbfef17bb92369600a",
+      "host": "keybase.io",
+      "kid": "012026f3d2df48d71d6ca5a33418101c284f7a73aac8944dc52edbfef17bb92369600a",
+      "uid": "120150a540a9487c406e6cf5e0423419",
+      "username": "xevion"
+    },
+    "merkle_root": {
+      "ctime": 1567480890,
+      "hash": "7f2baf022fe96ef444aa8b20efcf22d38c3fd365cbab290bfb88b4030913fc51ebe4dbbf449a41a8fdbada3a38a61be3fb7e3a5fac8f6ebacabd30a8fed3cc41",
+      "hash_meta": "77548724a604d2037622dbc1911ace1d52657099abcedc57616b942b4fb00e25",
+      "seqno": 6155445
+    },
+    "service": {
+      "entropy": "MI0wJwk4YGTqpsvnmel9g47b",
+      "hostname": "xevion.dev",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "4.3.2"
+  },
+  "ctime": 1567480926,
+  "expire_in": 504576000,
+  "prev": "e7b3066a4c075ebad45441c3f60970a126c4a39b6b53b92889c4ec8e3b5eaa72",
+  "seqno": 5,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgJvPS30jXHWylozQYEBwoT3pzqsiUTcUu2/7xe7kjaWAKp3BheWxvYWTESpcCBcQg57MGakwHXrrUVEHD9glwoSbEo5trU7koicTsjjteqnLEIEse4fcG/N2RI4Z3Hl1P7axfIL0HqjheQOn21Dn9KLI0AgHCo3NpZ8RAFlBr1ktDJ962ZPBUzzVwomYRGqmIZn6NQQss4VobWjtDTGpgf7we46HRNSyRm+pHCpUWTVdzyJJASU/NJUK3BqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIMXyhjLIwMnCYUwNqh2f9ChdP1naHi90z8836dMlCQG9o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/xevion
+
+==================================================================
