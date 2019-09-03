@@ -25,6 +25,10 @@ markdown = mistune.Markdown()
 
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
 
+@app.route('/keybase.txt')
+def keybase():
+    return app.send_static_file('keybase.txt')
+
 @app.route('/modpacks')
 def modpacks():
     return markdown(open(os.path.join(app.root_path, 'static', 'MODPACKS.MD'), 'r').read())
