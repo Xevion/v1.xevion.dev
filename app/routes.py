@@ -43,7 +43,7 @@ def favicon():
 @app.route('/avatar/<id>')
 def getAvatar(id=''):
     # Constants
-    token = open(os.path.join(sys.path[0], 'app', 'static', 'token.dat'), 'r').read()
+    token = open(os.path.join(sys.path[0], 'app', 'static', 'token.dat'), 'r').read().strip()
     headers = {'Authorization' : f'Bot {token}'}
     api = "https://discordapp.com/api/v6/users/{}"
     cdn = "https://cdn.discordapp.com/avatars/{}/{}.png"
