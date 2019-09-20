@@ -18,6 +18,7 @@ import faker
 import json
 import pprint
 import os
+import sys
 
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
@@ -36,6 +37,23 @@ def modpacks():
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+@app.route('/avatar/')
+@app.route('/avatar/<id>/')
+@app.route('/avatar/<id>')
+def getAvatar(id=''):
+    # Constants
+    token = open(os.path.join(sys.path[0], 'app', 'static', 'token.dat'), 'r').read()
+    headers = {'Authorization' : f'Bot {token}'}
+    api = "https://discordapp.com/api/v6/users/{}"
+    cdn = "https://cdn.discordapp.com/avatars/{}/{}.png"
+    # Get User Data which contains Avatar Hash
+    response = requests.get(api.format(id), headers=headers)
+    if response.status_code != 200:
+        return response.text
+    user = json.loads(response.text)
+    url = cdn.format(id, user['avatar'])
+    return "<img src=\"{}\">".format(url)
 
 @app.errorhandler(401)
 def unauthorized(e):
