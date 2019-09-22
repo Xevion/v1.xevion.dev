@@ -12,3 +12,4 @@ key
 /app/__pycache__/*
 /__pycache__/*
 app/static/token.dat
+.vscode/*
