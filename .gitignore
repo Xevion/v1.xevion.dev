@@ -13,3 +13,4 @@ key
 /__pycache__/*
 app/static/token.dat
 .vscode/*
+keys.json

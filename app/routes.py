@@ -8,6 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from io import BytesIO
 from textwrap import wrap
 from PIL import Image, ImageDraw, ImageFont
+from multiprocessing import Value
 import mistune
 import requests
 import xmltodict
@@ -23,8 +24,51 @@ import sys
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
 markdown = mistune.Markdown()
-
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
+
+@app.route('/ftbhot/about')
+@app.route('/ftbhot/about/')
+def ftbhot_about():
+    return "about page xd"
+
+@app.route('/ftbhot/auth')
+@app.route('/ftbhot/auth/')
+def ftbhot_auth():
+    return 'hi bot guy'
+
+@app.route('/ftbhot')
+
+@app.route('/time')
+def time():
+    value = request.args.get('value')
+    if not value:
+        return '<br>'.join(['[int] value', '[int list] lengths', '[string list] strings', '[boolean] reverse', '[string] pluralappend', '[boolean] synonym'])
+    value = int(value)
+    lengths = request.args.get('lengths')
+    if lengths: lengths = lengths.split(',')
+    strings = request.args.get('strings')
+    if strings: strings = strings.split(',')
+    if len(lengths or []) + 1 != len(strings or []):
+        return f'error: lengths ({len(lengths or [])}) and strings ({len(strings or [])}) arrays must be same length to process properly'
+    if lengths: lengths = list(map(int, lengths))
+    reverse = request.args.get('reverse')
+    if reverse: reverse = bool(reverse)
+    return timeformat(value=value, lengths=lengths or [60, 60, 24, 365], strings=strings or ['second', 'minute', 'hour', 'day', 'year'], reverse=True if reverse is None else reverse)
+
+def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'hour', 'day', 'year'], reverse=True, pluralappend='s', synonym=False):
+    converted = [value]
+    for index, length in enumerate(lengths):
+        temp = converted[-1] // length
+        if not synonym:
+            converted[-1] = converted[-1] % length
+        if temp != 0:
+            converted.append(temp)
+        else:
+            break    
+    strings = strings[:len(converted)]
+    build = ['{} {}'.format(value, strings[i] + pluralappend if value > 1 or value == 0 else strings[i]) for i, value in enumerate(converted)][::-1]
+    build = ', '.join(build)
+    return build
 
 @app.route('/keybase.txt')
 def keybase():
@@ -43,8 +87,7 @@ def favicon():
 @app.route('/avatar/<id>')
 def getAvatar(id=''):
     # Constants
-    token = open(os.path.join(sys.path[0], 'app', 'static', 'token.dat'), 'r').read().strip()
-    headers = {'Authorization' : f'Bot {token}'}
+    headers = {'Authorization' : f'Bot {app.config["DISCORD_TOKEN"]}'}
     api = "https://discordapp.com/api/v6/users/{}"
     cdn = "https://cdn.discordapp.com/avatars/{}/{}.png"
     # Get User Data which contains Avatar Hash
@@ -178,11 +221,11 @@ def boolparse(string, default=False):
 # The only implementation I could get to work
 def validate_id(id):
     id = str(id).strip()
-    val = str(app.config['HIDDEN_URL']).strip()
+    val = str(app.config['HIDDEN_NUMBER']).strip()
     return id == val
 
 def get_hidden():
-    return "/hidden{}/".format(app.config['HIDDEN_URL'])
+    return "/hidden{}/".format(app.config['HIDDEN_NUMBER'])
 
 @app.route('/hidden<id>/history')
 @login_required
