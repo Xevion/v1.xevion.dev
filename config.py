@@ -6,7 +6,7 @@ keys = json.load(open(os.path.join(basedir, 'keys.json'), 'r'))
 class Config(object):
     REDDIT_SECRET = keys['REDDIT_SECRET']
     DISCORD_TOKEN = keys['DISCORD_TOKEN']
-    SECRET_KEY = keys['PASSWORD_HASH']
+    SECRET_KEY = keys['SECRET_KEY']
     HIDDEN_NUMBER = keys['HIDDEN_NUMBER']
     TEMPLATES_AUTO_RELOAD=True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \

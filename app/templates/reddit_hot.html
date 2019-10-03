@@ -1,0 +1,10 @@
+<html>
+    <head>
+        <title></title>
+        <link type="application/json+oembed" href="https://xevion.dev/ftbhot/json" />
+        {% if description is defined %}<meta content="{{ description }}" property="og:description">{% endif %}
+        {% if banner_image is defined %}<meta content="{{ banner_image }}" property="og:image"><meta name="twitter:card" content="summary_large_image">{% endif %}
+        {% if color is defined %}<meta content="{{ color }}" name="theme-color">{% endif %}
+    </head>
+    <body>This page isn't meant to be viewed by users.</body>
+</html>

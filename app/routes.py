@@ -37,8 +37,11 @@ def ftbhot_auth():
     return 'hi bot guy'
 
 @app.route('/ftbhot')
+@app.route('/ftbhot/')
+def ftbhot():
+    return 't'
 
-@app.route('/time')
+@app.route('/time/')
 def time():
     value = request.args.get('value')
     if not value:
