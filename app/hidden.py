@@ -1,7 +1,12 @@
 from app import app, db, login
+from app.models import Search
 from app.custom import require_role
 from flask_login import current_user, login_user, logout_user, login_required
-from flask import request
+from flask import request, render_template
+import requests
+import xmltodict
+import base64
+import json
 
 # The only implementation I could get to work
 def validate_id(id):
