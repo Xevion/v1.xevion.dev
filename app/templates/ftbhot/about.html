@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+{% endblock head %}
+{% block body %}
+<!-- About Section -->
+<section class="section section-padding">
+    <div class="container">
+        <div class="columns is-mobile is-multiline is-centered">
+            <div class="card">
+                <div class="card-content">
+                <pre><code class="lang-shell">This mini-project doesn't really have that great of an explanation.<br>Go to the /r/feedthebeast subreddit's discord and use the ??backontopic command.</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End About Section -->
+{% endblock body %}
