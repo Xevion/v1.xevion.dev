@@ -171,12 +171,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# The only implementation I could get to work
-def validate_id(id):
-    id = str(id).strip()
-    val = str(app.config['HIDDEN_NUMBER']).strip()
-    return id == val
-
 def get_hidden():
     return "/hidden{}/".format(app.config['HIDDEN_NUMBER'])
 

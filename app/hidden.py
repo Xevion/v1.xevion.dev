@@ -1,6 +1,22 @@
 from app import app, db, login
 from app.custom import require_role
 from flask_login import current_user, login_user, logout_user, login_required
+from flask import request
+
+# The only implementation I could get to work
+def validate_id(id):
+    id = str(id).strip()
+    val = str(app.config['HIDDEN_NUMBER']).strip()
+    return id == val
+
+# Parses strings to test for "boolean-ness"
+def boolparse(string, default=False):
+    trues = ['true', '1']
+    if string is None:
+        return default
+    elif string.lower() in trues:
+        return True
+    return False
 
 @app.route('/hidden<id>/')
 @login_required

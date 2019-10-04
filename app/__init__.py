@@ -16,5 +16,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from app import models
-from app import routes, simple_routes, hidden, dashboard, custom
+from app import routes, simple_routes, hidden, dashboard, ftbhot, custom
 app.jinja_env.globals.update(get_hidden=routes.get_hidden)
