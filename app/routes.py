@@ -51,7 +51,7 @@ def time():
     if lengths: lengths = lengths.split(',')
     strings = request.args.get('strings')
     if strings: strings = strings.split(',')
-    if len(lengths or []) + 1 != len(strings or []):
+    if (len(lengths or []) + len(strings or []) > 0) and (len(lengths or []) + 1 != len(strings or [])):
         return f'error: lengths ({len(lengths or [])}) and strings ({len(strings or [])}) arrays must be same length to process properly'
     if lengths: lengths = list(map(int, lengths))
     reverse = request.args.get('reverse')
