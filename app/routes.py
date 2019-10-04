@@ -3,16 +3,15 @@ from app.models import User, Search
 from app.forms import LoginForm, RegistrationForm
 from app.custom import require_role
 from werkzeug.urls import url_parse
-from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file, send_from_directory
+from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file
 from flask_login import current_user, login_user, logout_user, login_required
 from io import BytesIO
 from textwrap import wrap
 from PIL import Image, ImageDraw, ImageFont
 from multiprocessing import Value
-import mistune
+import flask
 import requests
 import xmltodict
-import base64
 import random
 import string
 import faker
@@ -23,28 +22,7 @@ import sys
 
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
-markdown = mistune.Markdown()
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
-
-@app.route('/ftbhot/about')
-@app.route('/ftbhot/about/')
-def ftbhot_about():
-    return render_template('/ftbhot/about.html')
-
-@app.route('/ftbhot/auth')
-@app.route('/ftbhot/auth/')
-def ftbhot_auth():
-    return 'WIP'
-
-@app.route('/ftbhot')
-@app.route('/ftbhot/')
-def ftbhot():
-    return render_template('/ftbhot/embed.html')
-
-@app.route('/ftbhot/json')
-@app.route('/ftbhot/json/')
-def ftbhot_embed():
-    return render_template('/ftbhot/current.json')
 
 @app.route('/time/')
 def time():
@@ -78,18 +56,6 @@ def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'h
     build = ', '.join(build)
     return build
 
-@app.route('/keybase.txt')
-def keybase():
-    return app.send_static_file('keybase.txt')
-
-@app.route('/modpacks')
-def modpacks():
-    return markdown(open(os.path.join(app.root_path, 'static', 'MODPACKS.MD'), 'r').read())
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
 @app.route('/avatar/')
 @app.route('/avatar/<id>/')
 @app.route('/avatar/<id>')
@@ -106,15 +72,11 @@ def getAvatar(id=''):
     url = cdn.format(id, user['avatar'])
     return "<img src=\"{}\">".format(url)
 
-@app.errorhandler(401)
-def unauthorized(e):
-    return redirect(url_for('login'))
-
 def serve_pil_image(pil_img):
     img_io = BytesIO()
     pil_img.save(img_io, 'JPEG', quality=50)
     img_io.seek(0)
-    return send_file(img_io, mimetype='image/jpeg')
+    return flask.send_file(img_io, mimetype='image/jpeg')  
 
 @app.route('/panzer/')
 @app.route('/panzer')
@@ -139,15 +101,10 @@ def create_panzer(string):
         draw.text((topleft[0], topleft[1] + (y * 33)), text, font=font2)
     return img
 
-
 @app.route('/profile/')
 @login_required
 def profile():
     return render_template('profile.html')
-
-@app.route('/api/')
-def api():
-    return 'fuckoff bots'
 
 @app.route('/userinfo/')
 @login_required
@@ -214,18 +171,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-def boolparse(string, default=False):
-    # falses = ['false', '0']
-    trues = ['true', '1']
-    if string is None:
-        return default
-    elif string.lower() in trues:
-        return True
-    # elif string.lower() in falses:
-    #     return False
-    else:
-        return False
-
 # The only implementation I could get to work
 def validate_id(id):
     id = str(id).strip()
@@ -251,74 +196,3 @@ def hidden_help(id):
     if not validate_id(id):
         return '<span style="color: red;">error:</span> bad id'
     return render_template('hidden_help.html')
-
-@app.route('/hidden<id>/')
-@login_required
-@require_role(roles=['Hidden'])
-def hidden(id):
-    if not validate_id(id):
-        return '<span style="color: red;">error:</span> bad id'
-    # Handled within request
-    tags = request.args.get('tags') or 'trap'
-    try:
-        page = int(request.args.get('page') or 1)
-    except (TypeError, ValueError):
-        return '\"page\" parameter must be Integer.<br>Invalid \"page\" parameter: \"{}\"'.format(request.args.get('page'))
-    # Handled within building
-    try:
-        count = int(request.args.get('count') or 50)
-    except (TypeError, ValueError):
-        return '\"count\" parameter must be Integer.<br>Invalid \"count\": \"{}\"'.format(request.args.get('count'))
-    base64 = boolparse(request.args.get('base64'))
-    # Handled within Jinja template
-    showfull = boolparse(request.args.get('showfull'))
-    showtags = boolparse(request.args.get('showtags'))
-    # Request, Parse & Build Data
-    data = build_data(tags, page-1, count, base64, showfull)
-    # Handling for limiters
-    if base64:
-        if showfull:
-            count = min(25, count)
-        else:
-            count = min(50, count)
-    search = Search(user_id=current_user.id, exact_url=str(request.url), query_args=json.dumps(request.args.to_dict()))
-    db.session.add(search)
-    db.session.commit()
-    return render_template('hidden.html', title='Gelbooru Browser', data=data, tags=tags, page=page, count=count, base64=base64, showfull=showfull, showtags=showtags)
-
-def base64ify(url):
-    return base64.b64encode(requests.get(url).content).decode()
-
-gelbooru_api_url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags={}&pid={}&limit={}"
-gelbooru_view_url = "https://gelbooru.com/index.php?page=post&s=view&id={}"
-
-def build_data(tags, page, count, base64, showfull):
-    # URL Building & Request
-    temp = gelbooru_api_url.format(tags, page, count)
-    response = requests.get(temp).text
-    # XML Parsing & Data Building
-    parse = xmltodict.parse(response)
-    build = []
-    
-    try:
-        parse['posts']['post']
-    except KeyError:
-        return build
-
-    for index, element in enumerate(parse['posts']['post'][:count]):
-        temp = {
-                'index' : str(index + 1),
-                'real_url' : element['@file_url'],
-                'sample_url' : element['@preview_url'],
-                # strips tags, ensures no empty tags (may be unnescary)
-                'tags' : list(filter(lambda tag : tag != '', [tag.strip() for tag in element['@tags'].split(' ')])),
-                'view' : gelbooru_view_url.format(element['@id'])
-                }
-        if base64:
-            if not showfull:
-                temp['base64'] = base64ify(temp['sample_url'])
-            else:
-                temp['base64'] = base64ify(temp['real_url'])
-
-        build.append(temp)
-    return build
