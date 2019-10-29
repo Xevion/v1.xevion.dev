@@ -15,4 +15,3 @@ app/static/token.dat
 .vscode/*
 keys.json
 .cache-xevioni
-app/spotify_explicit/**
