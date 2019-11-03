@@ -1,0 +1,8 @@
+hurry.filesize
+pyperclip
+numpy
+spotipy
+matplotlib
+Pillow
+python_dateutil
+hurry
