@@ -21,6 +21,8 @@ def check_and_update():
 @app.route('/spotify/')
 def spotify():
     if check_and_update():
-        print('Graph out of date - running udpate command')
-        r = subprocess.run(['python3', '/home/xevion/xevion.dev/app/spotify_explicit/main.py'])
+        from .spotify_explicit import main
+        print('Graph out of date - running update command')
+        main.main()
+        # r = subprocess.run(['python3', '/home/xevion/xevion.dev/app/spotify_explicit/main.py'])
     return send_file('spotify_explicit/export/export.png')
