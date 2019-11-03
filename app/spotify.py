@@ -22,5 +22,5 @@ def check_and_update():
 def spotify():
     if check_and_update():
         print('Graph out of date - running udpate command')
-        r = subprocess.run(['python', './app/spotify_explicit/main.py'], capture_output=True)
+        r = subprocess.run(['python', './app/spotify_explicit/main.py'])
     return send_file('spotify_explicit/export/export.png')
