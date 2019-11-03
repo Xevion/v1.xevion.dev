@@ -14,8 +14,9 @@ def check_and_update():
         except json.JSONDecodeError:
             file = {'last_generated' : -1}
     regen = time.time() - 3600 >= file['last_generated']
-    with open(path, 'w') as file:
-        file = json.dump({'last_generated' : int(time.time())}, file)
+    if file['last_generated'] != -1:
+        with open(path, 'w') as file:
+            file = json.dump({'last_generated' : int(time.time())}, file)
     return regen
     
 @app.route('/spotify/')
