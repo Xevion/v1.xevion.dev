@@ -4,6 +4,7 @@ cache_xevioni/**
 .cache-*
 auth.json
 export/**
+recent.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
