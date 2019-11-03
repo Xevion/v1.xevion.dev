@@ -2,9 +2,9 @@ import os
 import sys
 import time
 import json
-import auth
-import pull
-import process
+from . import auth
+from . import pull
+from . import process
 import logging
 
 

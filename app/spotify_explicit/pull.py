@@ -1,6 +1,6 @@
 import os
 import sys
-import auth
+from . import auth
 import json
 import shutil
 import pprint
