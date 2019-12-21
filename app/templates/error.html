@@ -5,10 +5,10 @@
 	<div class="hero-body">
 		<div class="container has-text-centered">
 			<p class="title">
-				{{ code }}
+				{{ code if code is not none else 'Error' }}
 			</p>
-			<p class="subtitle">
-				{{ message }} <em href="{{ url_for('index') }}">Go home?</em>
+			<p class="subtitle"> 
+				{{ message if message is not none else 'Error encountered' }} <em href="{{ url if url is not none else url_for('index') }}">{{ url_message if url_message is not none else 'Go home?' }}</em>
 			</p>
 		</div>
 	</div>

@@ -17,6 +17,6 @@ migrate = Migrate(app, db)
 
 from app import models
 from app import routes, simple_routes, hidden, dashboard
-from app import ftbhot, custom, spotify, panzer
+from app import ftbhot, custom, spotify, panzer, sound
 
 app.jinja_env.globals.update(get_hidden=routes.get_hidden)

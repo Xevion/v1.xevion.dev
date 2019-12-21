@@ -16,3 +16,4 @@ app/static/token.dat
 keys.json
 .cache-xevioni
 auth.json
+app/sounds/*
