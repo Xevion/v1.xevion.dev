@@ -5,9 +5,6 @@ from app.custom import require_role
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file
 from flask_login import current_user, login_user, logout_user, login_required
-from io import BytesIO
-from textwrap import wrap
-from PIL import Image, ImageDraw, ImageFont
 from multiprocessing import Value
 import flask
 import requests
@@ -75,40 +72,6 @@ def getAvatar(id=''):
     user = json.loads(response.text)
     url = cdn.format(id, user['avatar'])
     return "<img src=\"{}\">".format(url)
-
-def serve_pil_image(pil_img):
-    img_io = BytesIO()
-    pil_img.save(img_io, 'JPEG', quality=50)
-    img_io.seek(0)
-    return flask.send_file(img_io, mimetype='image/jpeg')  
-
-@app.route('/panzer/')
-@app.route('/panzer')
-@app.route('/panzer/<string>')
-@app.route('/panzer/<string>/')
-def panzer(string='bionicles are cooler than sex'):
-    string = string.replace('+', ' ')
-    string = string.replace('\n', '%0A')
-    image = create_panzer(string)
-    return serve_pil_image(image)
-
-def create_panzer(string):
-    img = Image.open("./app/static/panzer.jpeg")
-    draw = ImageDraw.Draw(img)
-    font1 = ImageFont.truetype('./app/static/arial.ttf', size=30)
-    draw.text((10, 20), 'Oh panzer of the lake, what is your wisdom?', font=font1)
-    font2 = ImageFont.truetype('./app/static/arial.ttf', size=30)
-    topleft = (250, 500)
-    wrapped = wrap(string, width=25)
-    wrapped = [text.replace('%0A', '\n') for text in wrapped]
-    for y, text in enumerate(wrapped):
-        draw.text((topleft[0], topleft[1] + (y * 33)), text, font=font2)
-    return img
-
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template('404.html'), 404
 
 @app.route('/userinfo/')
 @login_required

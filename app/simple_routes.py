@@ -1,5 +1,5 @@
 from app import app
-from flask import send_from_directory, redirect, url_for
+from flask import send_from_directory, redirect, url_for, render_template
 import mistune
 import os
 
@@ -20,3 +20,8 @@ def favicon():
 @app.errorhandler(401)
 def unauthorized(e):
     return redirect(url_for('login'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
