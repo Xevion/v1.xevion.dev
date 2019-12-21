@@ -1,29 +1,38 @@
 from app import app
+from flask import send_from_directory, redirect, url_for, render_template, send_file
 import json
 import subprocess
 import time
 import os
-from flask import send_from_directory, redirect, url_for, render_template, send_file
+from .spotify_explicit import main
 
+
+path = os.path.join('app/spotify_explicit/recent.json')
 
 def check_and_update():
-    path = os.path.join('app/spotify_explicit/recent.json')
     with open(path) as file:
         try:
             file = json.load(file)
         except json.JSONDecodeError:
             file = {'last_generated' : -1}
-    regen = time.time() - 3600 >= file['last_generated']
-    if file['last_generated'] != -1:
-        with open(path, 'w') as file:
-            file = json.dump({'last_generated' : int(time.time())}, file)
-    return regen
+    
+    if file['last_generated'] == -1:
+        return True
+    else:
+        dif = time.time() - file['last_generated']
+        # print('dif', dif)
+        if dif >= 3600:
+            return True
+        else:
+            ideal = file['last_generated'] + 3600
+            # print(f'Waiting another {int(ideal - time.time())} seconds')
+    return False
     
 @app.route('/spotify/')
 def spotify():
     if check_and_update():
-        from .spotify_explicit import main
         print('Graph out of date - running update command')
+        with open(path, 'w') as file:
+            file = json.dump({'last_generated' : int(time.time())}, file)
         main.main()
-        # r = subprocess.run(['python3', '/home/xevion/xevion.dev/app/spotify_explicit/main.py'])
     return send_file('spotify_explicit/export/export.png')

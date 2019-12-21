@@ -73,7 +73,7 @@ def process_data(data):
 
     # Save the figure, overwriting anything in your way
     logging.info('Saving the figure to the \'export\' folder')
-    export_folder = os.path.join(sys.path[0], 'export')
+    export_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'export')
     if not os.path.exists(export_folder):
         os.makedirs(export_folder)
     plt.tight_layout()

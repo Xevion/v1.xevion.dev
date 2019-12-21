@@ -15,3 +15,4 @@ app/static/token.dat
 .vscode/*
 keys.json
 .cache-xevioni
+auth.json
