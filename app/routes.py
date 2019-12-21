@@ -105,17 +105,6 @@ def create_panzer(string):
         draw.text((topleft[0], topleft[1] + (y * 33)), text, font=font2)
     return img
 
-@app.route('/profile/')
-@login_required
-def default_profile():
-    return profile(current_user.username)
-
-@app.route('/profile/<username>')
-@login_required
-def profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template('profile.html', user=user)
-
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
