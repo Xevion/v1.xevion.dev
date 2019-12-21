@@ -1,4 +1,5 @@
 from app import app
+from config import Config
 from flask import send_from_directory, redirect, url_for, render_template, send_file
 import json
 import subprocess
@@ -21,10 +22,10 @@ def check_and_update():
     else:
         dif = time.time() - file['last_generated']
         # print('dif', dif)
-        if dif >= 3600:
+        if dif >= Config.SPOTIFY_CACHE_TIME:
             return True
         else:
-            ideal = file['last_generated'] + 3600
+            ideal = file['last_generated'] + Config.SPOTIFY_CACHE_TIME
             # print(f'Waiting another {int(ideal - time.time())} seconds')
     return False
     

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 # Gets all files in tracks folder, returns them in parsed JSON
 def get_files():
-    folder = os.path.join(sys.path[0], 'tracks')
+    folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tracks')
     files = []
     for file in os.listdir(folder):
         with open(os.path.join(os.path.join(folder, file))) as file:

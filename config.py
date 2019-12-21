@@ -4,6 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 keys = json.load(open(os.path.join(basedir, 'keys.json'), 'r'))
 
 class Config(object):
+    SPOTIFY_CACHE_TIME = 3600 # Number of seconds before the spotify-explicit program can be regenerated
     REDDIT_SECRET = keys['REDDIT_SECRET']
     DISCORD_TOKEN = keys['DISCORD_TOKEN']
     SECRET_KEY = keys['SECRET_KEY']
