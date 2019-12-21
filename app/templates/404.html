@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block body %}
+<!-- Hero Section -->
+<section class="hero is-fullheight-with-navbar is-danger">
+	<div class="hero-body">
+		<div class="container has-text-centered">
+			<p class="title">
+				404
+			</p>
+			<p class="subtitle">
+				Content Not Found... <a href="{{ url_for('index') }}">Go home?</a>
+			</p>
+		</div>
+	</div>
+</section>
+<!-- End Hero Section -->
+{% endblock body %}

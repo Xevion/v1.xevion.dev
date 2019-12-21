@@ -16,7 +16,7 @@
 				Xevion
 			</p>
 			<p class="subtitle">
-				Python Developer
+				{{ job }}
 			</p>
 		</div>
 	</div>
@@ -38,7 +38,7 @@
 				<div class="card">
 					<div class="card-header">
 						<div class="card-header-title">
-							GitHub Actviity
+							GitHub Activity
 						</div>
 					</div>
 					<div class="card-content">
@@ -49,30 +49,6 @@
 				</div>
 			</div>
 			<!-- End GitHub Activity Feed -->
-
-			{% for card in content %}
-			<div class="column is-5">
-				<!-- Card -->
-				<div class="card">
-					<div class="card-header">
-						<div class="card-header-title">
-							{{  card.title }}
-						</div>
-					</div>
-					<div class="card-image">
-						<figure class="image">
-							<img src="https://picsum.photos/600/400/?random={{ card.seed }}" alt="Picsum Picture">
-						</figure>
-					</div>
-					<div class="card-content">
-						<div class="content word-break">
-							{{ card.text }}
-						</div>
-					</div>
-				</div>
-				<!-- Card End -->
-			</div>
-			{% endfor %}
 		</div>
 		{% endif %}
 	</div> </section>

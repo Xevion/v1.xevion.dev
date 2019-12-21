@@ -9,10 +9,57 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-title">
-                            {{ username }}'s Profile
+                            {{ user.username }}'s Profile
                         </div>
                     </div>
                     <div class="card-content">
+
+                        <div class="row align-items-center" style="margin-left: 0px; ">
+                            <div class="form-group">
+                                <!-- Username -->
+                                <div class="row mt-4">
+                                    <div class="col-auto">
+                                        <label class="mb-1" style="width: 80px;">
+                                            Username
+                                        </label>
+                                        <label style="font-weight: bold;">
+                                            {{ user.username }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {% if user.show_email or current_user.has_role('hidden') %}
+                                <div class="row mt-3">
+                                    <div class="col-auto">
+                                        <label class="mb-1" style="width: 80px;">
+                                            Email
+                                        </label>
+                                        <label style="font-weight: bold;">
+                                            {{ user.email or '-' }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div class="row mt-3">
+                                    <div class="col-auto">
+                                        <label class="mb-1" style="width: 80px;">
+                                            Phone
+                                        </label>
+                                        <label style="font-weight: bold;">
+                                            {{ user.phone_number or '-' }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row align-items-center" style="margin-left: -10px; ">
+                            <div class="col-auto">
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

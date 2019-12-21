@@ -107,8 +107,19 @@ def create_panzer(string):
 
 @app.route('/profile/')
 @login_required
-def profile():
-    return render_template('profile.html')
+def default_profile():
+    return profile(current_user.username)
+
+@app.route('/profile/<username>')
+@login_required
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('profile.html', user=user)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
 
 @app.route('/userinfo/')
 @login_required
@@ -127,8 +138,18 @@ def user_info():
     }
     return jsonify(prepare)
 
+
+
 @app.route('/')
 def index():
+    jobs = [
+        'Student Photographer',
+        'Highschool Student',
+        'Web Developer',
+        'Python Developer',
+        'Software Engineer',
+    ]
+
     # content = [{'text': fake.paragraph(nb_sentences=15),
     #             'seed': random.randint(0, 1000),
     #             'title': fake.word().title()}
@@ -137,7 +158,7 @@ def index():
                 'seed': random.randint(0, 1000),
                 'text': 'This portion of my website is still a work in progress. I don\'t know if and when it\'ll be done, or how it will turn out in the end. - Xevion @ (Jul-11-2019)'}
                for _ in range(1)]
-    return render_template('index.html', content=content)
+    return render_template('index.html', content=content, job=random.choice(jobs))
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
