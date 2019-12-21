@@ -24,6 +24,10 @@ print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
 strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
 
+@app.route('/', subdomain='api')
+def api_index():
+    return "api"
+
 @app.route('/time/')
 def time():
     value = request.args.get('value')

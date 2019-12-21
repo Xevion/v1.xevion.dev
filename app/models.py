@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Just a note, my role system is really quite terrible, but I've implemented as good as a system as I can for a simple RBAC without Hierarchy.
 # Once could create a complex system, but it would be better to properly work with SQLAlchemy to create proper permissions, hierarchy, parent/child etc. rather than to work with simple strings.
-# One should look into perhaps Pickled Pytthon objects if they were interested in simplfiying interactions while opening a lot more data storage.
+# One should look into perhaps Pickled Python objects if they were interested in simplifying interactions while opening a lot more data storage.
 @login.user_loader
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     uroles = db.Column(db.String(80), default='')
     about_me = db.Column(db.String(320))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    show_email = db.Column
+    show_email = db.Column(db.Boolean, default=False)
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
