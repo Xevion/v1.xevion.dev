@@ -32,10 +32,11 @@ class YouTubeHandler:
             config = YouTubeHandler.getConfig(videoid)
             return config['filename']
         except KeyError:
-            filename = subprocess.run(
-                ['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--get-filename',
-                YouTubeHandler.url(videoid)], encoding='utf-8', capture_output=True).stdout
-            filename = filename.split('.')
+            # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
+            process = subprocess.Popen(
+                ['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--get-filename', YouTubeHandler.url(videoid)],
+                encoding='utf-8', stdout=subprocess.PIPE)
+            filename = process.communicate()[0].split('.')
             filename[-1] = 'mp3'
             return '.'.join(filename)
 
@@ -63,7 +64,6 @@ class YouTubeHandler:
         config = YouTubeHandler.getConfig(videoid)
         if not os.path.exists(config['path']):
             subprocess.run(['youtube-dl', '-x', '--restrict-filenames', '--audio-format', 'mp3', YouTubeHandler.url(videoid)])
-            print(os.listdir('.'))
             os.rename(config['filename'], config['path'])
 
 service_functions = {
