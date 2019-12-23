@@ -73,7 +73,7 @@ service_functions = {
 }
 
 if not os.path.exists(os.path.join('app', 'sounds', 'filenames.json')):
-    with open(os.path.join('app', 'sounds', 'filenames.json'), 'w') as file:
+    with open(os.path.join('app', 'sounds', 'filenames.json'), 'w+') as file:
         json.dump({'youtube' : {} })    
 
 # Streams a prepared MP3 back to the client
