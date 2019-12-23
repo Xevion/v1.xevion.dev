@@ -72,6 +72,9 @@ service_functions = {
     'soundcloud' : {'url' : None, 'path' : None}
 }
 
+if not os.path.exists(os.path.join('app', 'sounds')):
+    os.mkdir(os.path.join('app', 'sounds'))
+
 if not os.path.exists(os.path.join('app', 'sounds', 'filenames.json')):
     with open(os.path.join('app', 'sounds', 'filenames.json'), 'w+') as file:
         json.dump({'youtube' : {} })    
