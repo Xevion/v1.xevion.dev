@@ -24,7 +24,7 @@ def main():
     sp = spotipy.Spotify(auth=token)
     logging.info('Authorized with Spotify via Spotipy')
 
-    tracks_folder = os.path.join(sys.path[0], 'tracks')
+    tracks_folder = os.path.join(os.path.dirname(__file__), 'tracks')
     logging.warning('Clearing all files in tracks folder for new files')
     if os.path.exists(tracks_folder):
         shutil.rmtree(tracks_folder) # Delete folder and all contents (old track files)

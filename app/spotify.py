@@ -11,11 +11,11 @@ from .spotify_explicit import main
 path = os.path.join('app/spotify_explicit/recent.json')
 
 def check_and_update():
-    with open(path) as file:
-        try:
+    try:
+        with open(path) as file:
             file = json.load(file)
-        except json.JSONDecodeError:
-            file = {'last_generated' : -1}
+    except (FileNotFoundError, json.JSONDecodeError):
+        file = {'last_generated' : -1}
     
     if file['last_generated'] == -1:
         return True
@@ -33,7 +33,7 @@ def check_and_update():
 def spotify():
     if check_and_update():
         print('Graph out of date - running update command')
-        with open(path, 'w') as file:
+        with open(path, 'w+') as file:
             file = json.dump({'last_generated' : int(time.time())}, file)
         main.main()
     return send_file('spotify_explicit/export/export.png')
