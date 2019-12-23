@@ -77,7 +77,7 @@ if not os.path.exists(os.path.join('app', 'sounds')):
 
 if not os.path.exists(os.path.join('app', 'sounds', 'filenames.json')):
     with open(os.path.join('app', 'sounds', 'filenames.json'), 'w+') as file:
-        json.dump({'youtube' : {} })    
+        json.dump({'youtube' : {} }, file)
 
 # Streams a prepared MP3 back to the client
 @app.route('/stream/<service>/<mediaid>')
