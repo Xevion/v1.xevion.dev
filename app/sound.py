@@ -72,6 +72,10 @@ service_functions = {
     'soundcloud' : {'url' : None, 'path' : None}
 }
 
+if not os.path.exists(os.path.join('app', 'sounds', 'filenames.json')):
+    with open(os.path.join('app', 'sounds', 'filenames.json'), 'r+') as file:
+        json.dump({'youtube' : {} })    
+
 # Streams a prepared MP3 back to the client
 @app.route('/stream/<service>/<mediaid>')
 def stream(service, mediaid):
