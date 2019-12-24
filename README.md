@@ -22,5 +22,14 @@ I was hoping to get a Hastebin server through node at a URL under root, i.e. `ht
 
 * Signup page
     * Some kind of sign-up page would be nice, but I'll need to create some kind of administration role setup so only I can do things while registered users will not be able to do much more than post or view stuff on my site.
+    * Late Addendum: Users probably will not need a profile, so I hope to discontinue any progress on inter-user interaction, focusing more on myself and the interaction between the users and my site's services (all zero of them).
 * Projects Page
-    * Integrate with GitHub so that code, images etc. are automatically updated.
+    * Integrate with GitHub so that code, images etc. are automatically updated. Needs a lot of thinking to come up with a smart, automatically updating, featureful way so that anything I work on can be properly displayed on the website beauitfully.
+* FTBHot Mini-project
+    * I'd like to integrate a interesting Embed for Discord to pull the /hot posts from the subreddit /r/feedthebeast.
+* YouTube MP3s (and other services)
+    * To integrate with my Expression 2 scripts, I'm attempting to create a YouTube to MP3 API for servicing my Garry's Mod experience. Mostly a chance to start updating my site with new stuff, properly finish things I never got around to last time.
+    * Once I properly integrate it with a simple database system for keeping track of files, proxies, URLs, services (YouTube, Spotify, Soundcloud etc.), I'd be highly interested in completing my script to lease to people for in-game payment.
+* Features Page
+    * At some point, once I complete more features, I need a way to show people how to use them, where they are etc.
+    * So far, all my features are completely hidden, my code is a maze of functions that most people won't care to read.
