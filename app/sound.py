@@ -1,5 +1,6 @@
 from app import app
-from flask import send_file, redirect, url_for, render_template
+from app.sound_models import YouTubeAudio, SoundcloudAudio
+from flask import Response, send_file, redirect, url_for, render_template
 from multiprocessing import Value
 from mutagen.mp3 import MP3
 import os
@@ -7,15 +8,31 @@ import re
 import json
 import subprocess
 
+def get_youtube(mediaid):
+    audio = YouTubeAudio.query.filter_by(id=mediaid).first()
+    if audio is not None:
+        return audio
+
 @app.route('/stream/<service>/<mediaid>')
 def stream(service, mediaid):
-    prepare(service, mediaid)
-    config = service_functions[service].getConfig(mediaid)
-    return send_file(os.path.join(os.path.dirname(__file__), '..', config['path']), attachment_filename=config['filename'])
-    
+    if service == 'youtube':
+        audio = get_youtube(mediaid)
+        return send_file(audio.getPath(), attachment_filename=audio.filename)
+    elif service == 'soundcloud':
+        return Response('Not implemented', status=501, mimetype='application/json')
+    elif service == 'spotify':
+        return Response('Not implemented', status=501, mimetype='application/json')
+    else:
+        return Response('Bad request', status=400, mimetype='application/json')
 # Prepares a URL for download, returning the duration it should play for if streamed
-@app.route('/prepare/<service>/<mediaid>')
-def prepare(service, mediaid):
-    filepath = service_functions[service].path(mediaid)
-    service_functions[service].download(mediaid)
-    return str(MP3(filepath).info.length)
+@app.route('/duration/<service>/<mediaid>')
+def duration(service, mediaid):
+    if service == 'youtube':
+        duration = get_youtube(mediaid).durationn
+        return Response(duration, status=200, mimetype='application/json')
+    elif service == 'soundcloud':
+        return Response('Not implemented', status=501, mimetype='application/json')
+    elif service == 'spotify':
+        return Response('Not implemented', status=501, mimetype='application/json')
+    else:
+        return Response('Bad request', status=400, mimetype='application/json')
