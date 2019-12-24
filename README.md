@@ -33,3 +33,5 @@ I was hoping to get a Hastebin server through node at a URL under root, i.e. `ht
 * Features Page
     * At some point, once I complete more features, I need a way to show people how to use them, where they are etc.
     * So far, all my features are completely hidden, my code is a maze of functions that most people won't care to read.
+* Better spotify-explicit integration
+    * More graphs, better graph export/filenames to user
