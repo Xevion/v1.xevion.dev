@@ -101,15 +101,6 @@ def index():
         'Python Developer',
         'Software Engineer',
     ]
-
-    # content = [{'text': fake.paragraph(nb_sentences=15),
-    #             'seed': random.randint(0, 1000),
-    #             'title': fake.word().title()}
-    #            for _ in range(0)]
-    content = [{'title': 'Work in Progress',
-                'seed': random.randint(0, 1000),
-                'text': 'This portion of my website is still a work in progress. I don\'t know if and when it\'ll be done, or how it will turn out in the end. - Xevion @ (Jul-11-2019)'}
-               for _ in range(1)]
     return render_template('index.html', content=content, job=random.choice(jobs))
 
 @app.route('/register/', methods=['GET', 'POST'])
