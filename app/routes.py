@@ -147,23 +147,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-def get_hidden():
-    return "/hidden{}/".format(app.config['HIDDEN_NUMBER'])
-
-@app.route('/hidden<id>/history')
-@login_required
-@require_role(roles=['Hidden', 'Admin'])
-def hidden_history(id):
-    if not validate_id(id):
-        return '<span style="color: red;">error:</span> bad id'
-    return render_template('hidden_history.html')
-
-
-@app.route('/hidden<id>/help')
-@login_required
-@require_role(roles=['Hidden'])
-def hidden_help(id):
-    if not validate_id(id):
-        return '<span style="color: red;">error:</span> bad id'
-    return render_template('hidden_help.html')

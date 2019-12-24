@@ -8,11 +8,18 @@ import xmltodict
 import base64
 import json
 
-# The only implementation I could get to work
-def validate_id(id):
-    id = str(id).strip()
-    val = str(app.config['HIDDEN_NUMBER']).strip()
-    return id == val
+@app.route('/hidden/history')
+@login_required
+@require_role(roles=['Hidden', 'Admin'])
+def hidden_history():
+    return render_template('hidden_history.html')
+
+
+@app.route('/hidden/help')
+@login_required
+@require_role(roles=['Hidden'])
+def hidden_help():
+    return render_template('hidden_help.html')
 
 # Parses strings to test for "boolean-ness"
 def boolparse(string, default=False):
@@ -23,12 +30,10 @@ def boolparse(string, default=False):
         return True
     return False
 
-@app.route('/hidden<id>/')
+@app.route('/hidden/')
 @login_required
 @require_role(roles=['Hidden'])
-def hidden(id):
-    if not validate_id(id):
-        return '<span style="color: red;">error:</span> bad id'
+def hidden():
     # Handled within request
     tags = request.args.get('tags') or 'trap'
     try:
@@ -81,7 +86,7 @@ def build_data(tags, page, count, base64, showfull):
                 'index' : str(index + 1),
                 'real_url' : element['@file_url'],
                 'sample_url' : element['@preview_url'],
-                # strips tags, ensures no empty tags (may be unnescary)
+                # strips tags, ensures no empty tags (may be unnecessary)
                 'tags' : list(filter(lambda tag : tag != '', [tag.strip() for tag in element['@tags'].split(' ')])),
                 'view' : gelbooru_view_url.format(element['@id'])
                 }

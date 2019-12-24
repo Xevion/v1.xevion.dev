@@ -1,5 +1,10 @@
 {% extends '/dashboard/dashboard_base.html' %}
 {% set dashboard_home_active = True %}
 {% block dashboard_body %}
-<section></section>
+<section>
+    <h1>Roles</h1>
+    {% for role in current_user.get_roles() %}
+    <b>{{ role }}</b><br>
+    {% endfor %}
+</section>
 {% endblock dashboard_body %}
