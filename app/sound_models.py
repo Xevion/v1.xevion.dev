@@ -12,39 +12,49 @@ class YouTubeAudio(db.Model):
     uploader = db.Column(db.String(32)) # 20 -> 32
     filename = db.Column(db.String(156)) # 128 + 11 + 1 -> 156 
     duration = db.Column(db.Integer) 
-    access_count = db.Column(db.Integer)
+    access_count = db.Column(db.Integer, default=0)
     download_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_access_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def access(self):
-        self.access_count += 1
+        print(f'{self.id} was just accessed ')
+        self.access_count = (self.access_count or 0) + 1
         self.last_access_timestamp = datetime.utcnow()
         db.session.commit()
         return self
 
-    def getPath(self):
+    def getPath(self, alt=False):
+        if alt:
+            return os.path.join('sounds', 'youtube', self.filename)
         return os.path.join('app', 'sounds', 'youtube', self.filename)
 
     def file_exists(self):
         return os.path.exists(self.getPath())
 
     def fill_metadata(self):
+        print(f'Filling out metadata for {self.id}')
         # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
         self.url = f'https://www.youtube.com/watch?v={self.id}'
         processFilename = subprocess.Popen(['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--get-filename', self.url],
                 encoding='utf-8', stdout=subprocess.PIPE)
-        self.filename = processFilename.communicate()[0].split('.')[0] + 'mp3'
+        self.filename = processFilename.communicate()[0].split('.')[0] + '.mp3'
+        print(f'Filename acquired for {self.id}')
         processJSON = subprocess.Popen(['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--dump-json', self.url],
                 encoding='utf-8', stdout=subprocess.PIPE)
         data = json.loads(processJSON.communicate()[0])
+        print(f'JSON acquired for {self.id}, beginning to fill.')
         self.duration = data['duration']
         self.creator = data['creator'] or data['uploader']
         self.uploader = data['uploader'] or data['creator']
         self.title = data['title'] or data['alt_title'] # Do not trust alt-title ; it is volatile and uploader set, e.x. https://i.imgur.com/Tgff4rI.png
+        print(f'Metadata filled for {self.id}')
+        db.session.commit()
 
     def download(self):
+        print(f'Downloading MP3 for {self.id}')
         subprocess.run(['youtube-dl', '-x', '--restrict-filenames', '--audio-format', 'mp3', self.id])
         os.rename(self.filename, self.getPath())
+        print(f'Finished moving {self.id} into proper folder')
 
 class SoundcloudAudio(db.Model):
     id = db.Column(db.Integer, primary_key=True) # hidden API-accessible only ID

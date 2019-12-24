@@ -1,4 +1,4 @@
-from app import app
+from app import app, db
 from app.sound_models import YouTubeAudio, SoundcloudAudio
 from flask import Response, send_file, redirect, url_for, render_template
 from multiprocessing import Value
@@ -13,14 +13,21 @@ import subprocess
 def get_youtube(mediaid):
     audio = YouTubeAudio.query.filter_by(id=mediaid).first()
     if audio is not None:
-        return audio.access()
+        return audio # sets the access time to now
+    audio = YouTubeAudio(id=mediaid)
+    audio.fill_metadata()
+    audio.download()
+    # Commit and save new audio object into the database
+    db.session.add(audio)
+    db.session.commit()
+    return audio
 
 # Returns the duration of a specificed media
 @app.route('/stream/<service>/<mediaid>')
 def stream(service, mediaid):
     if service == 'youtube':
         audio = get_youtube(mediaid)
-        return send_file(audio.getPath(), attachment_filename=audio.filename)
+        return send_file(audio.getPath(alt=True), attachment_filename=audio.filename)
     elif service == 'soundcloud':
         return Response('Not implemented', status=501, mimetype='application/json')
     elif service == 'spotify':
