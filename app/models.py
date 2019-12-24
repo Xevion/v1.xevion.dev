@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 # Just a note, my role system is really quite terrible, but I've implemented as good as a system as I can for a simple RBAC without Hierarchy.
 # Once could create a complex system, but it would be better to properly work with SQLAlchemy to create proper permissions, hierarchy, parent/child etc. rather than to work with simple strings.
@@ -110,22 +111,6 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
-
-class YouTubeAudio(db.Model):
-    id = db.Column(db.String(11), primary_key=True) # 11 char id, presumed to stay the same for the long haul. Should be able to change to 12 chars.
-    url = db.Column(db.String(64)) # 43 -> 64
-    title = db.Column(db.String(128)) # 120 > 128
-    creator = db.Column(db.String(32)) # 20 -> 32
-    filename = db.Column(db.String(156)) # 128 + 11 + 1 -> 156 
-    duration = db.Column(db.Integer)
-
-class SoundcloudAudio(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # hidden API-accessible only ID
-    url = db.Column(db.String(256))
-    title = db.Column(db.String(128))
-    creator = db.Column(db.String(64))
-    filename = db.Column(db.String(156))
-    duration = db.Column(db.Integer)
 
 @login.user_loader
 def load_user(id):
