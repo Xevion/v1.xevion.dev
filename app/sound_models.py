@@ -12,8 +12,15 @@ class YouTubeAudio(db.Model):
     uploader = db.Column(db.String(32)) # 20 -> 32
     filename = db.Column(db.String(156)) # 128 + 11 + 1 -> 156 
     duration = db.Column(db.Integer) 
+    access_count = db.Column(db.Integer)
     download_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_access_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def access(self):
+        self.access_count += 1
+        self.last_access_timestamp = datetime.utcnow()
+        db.session.commit()
+        return self
 
     def getPath(self):
         return os.path.join('app', 'sounds', 'youtube', self.filename)
