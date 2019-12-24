@@ -15,10 +15,14 @@ class YouTubeAudio(db.Model):
     download_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_access_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    def getPath(self):
+        return os.path.join('app', 'sounds', 'youtube', self.filename)
+
     def file_exists(self):
-        return os.path.exists(os.path.join('app', 'sounds', 'youtube', self.filename))
+        return os.path.exists(self.getPath())
 
     def fill_metadata(self):
+        # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
         self.url = f'https://www.youtube.com/watch?v={self.id}'
         processFilename = subprocess.Popen(['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--get-filename', self.url],
                 encoding='utf-8', stdout=subprocess.PIPE)
@@ -30,6 +34,10 @@ class YouTubeAudio(db.Model):
         self.creator = data['creator'] or data['uploader']
         self.uploader = data['uploader'] or data['creator']
         self.title = data['title'] or data['alt_title'] # Do not trust alt-title ; it is volatile and uploader set, e.x. https://i.imgur.com/Tgff4rI.png
+
+    def download(self):
+        subprocess.run(['youtube-dl', '-x', '--restrict-filenames', '--audio-format', 'mp3', self.id])
+        os.rename(self.filename, self.getPath())
 
 class SoundcloudAudio(db.Model):
     id = db.Column(db.Integer, primary_key=True) # hidden API-accessible only ID
