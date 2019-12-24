@@ -111,6 +111,22 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
+class YouTubeAudio(db.Model):
+    id = db.Column(db.String(11), primary_key=True) # 11 char id, presumed to stay the same for the long haul. Should be able to change to 12 chars.
+    url = db.Column(db.String(64)) # 43 -> 64
+    title = db.Column(db.String(128)) # 120 > 128
+    creator = db.Column(db.String(32)) # 20 -> 32
+    filename = db.Column(db.String(156)) # 128 + 11 + 1 -> 156 
+    duration = db.Column(db.Integer)
+
+class SoundcloudAudio(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # hidden API-accessible only ID
+    url = db.Column(db.String(256))
+    title = db.Column(db.String(128))
+    creator = db.Column(db.String(64))
+    filename = db.Column(db.String(156))
+    duration = db.Column(db.Integer)
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

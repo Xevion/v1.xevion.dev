@@ -18,12 +18,6 @@ import shutil
 # https://soundcloud.com/yungraredeath/fall-in-line-w-kxng-prod-mars-mission => /stream/soundcloud/fall-in-line-w-kxng-prod-mars-mission---yungraredeath => soundcloud/fall-in-line-w-kxng-prod-mars-mission---yungraredeath.mp3
 # spotify:track:16PmczUxlX7dpr6ror6pXd => /duration/spotify/16PmczUxlX7dpr6ror6pXd => spotify/16PmczUxlX7dpr6ror6pXd.mp3
 
-class SoundcloudHandler:
-    pass
-
-class SpotifyHandler:
-    pass
-
 class YouTubeHandler:
     @staticmethod
     def url(videoid):
@@ -82,7 +76,6 @@ service_functions = {
 
 # Default JSON format, will be used in case of corruption
 JSONDefault = {'youtube' : {}, 'soundcloud' : {}, 'spotify' : {}}
-
 
 if not os.path.exists(os.path.join('app', 'sounds')):
     print('Sounds folder not found. Creating.')
