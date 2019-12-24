@@ -101,7 +101,7 @@ def index():
         'Python Developer',
         'Software Engineer',
     ]
-    return render_template('index.html', content=content, job=random.choice(jobs))
+    return render_template('index.html', job=random.choice(jobs))
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():

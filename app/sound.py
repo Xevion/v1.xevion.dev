@@ -7,32 +7,6 @@ import re
 import json
 import subprocess
 
-    @staticmethod
-    def path(videoid):
-        try:
-            config = YouTubeHandler.getConfig(videoid)
-            return config['path']
-        except KeyError:
-            filename = YouTubeHandler.filename(videoid)
-            path = os.path.join('app', 'sounds', 'youtube', filename)
-            with open(os.path.join('app', 'sounds', 'filenames.json'), 'r+') as file:
-                config = json.load(file)
-                config['youtube'][videoid] = {
-                    "filename" : filename,
-                    "path" : path
-                }
-                file.seek(0)
-                file.write(json.dumps(config))
-                file.truncate()
-            return path
-            
-    @staticmethod
-    def download(videoid):
-        config = YouTubeHandler.getConfig(videoid)
-        if not os.path.exists(config['path']):
-            subprocess.run(['youtube-dl', '-x', '--restrict-filenames', '--audio-format', 'mp3', YouTubeHandler.url(videoid)])
-            os.rename(config['filename'], config['path'])
-
 @app.route('/stream/<service>/<mediaid>')
 def stream(service, mediaid):
     prepare(service, mediaid)
