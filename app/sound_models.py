@@ -3,6 +3,7 @@ from app import db
 import subprocess
 import json
 import os
+import re
 
 class YouTubeAudio(db.Model):
     id = db.Column(db.String(11), primary_key=True) # 11 char id, presumed to stay the same for the long haul. Should be able to change to 12 chars.
@@ -38,7 +39,7 @@ class YouTubeAudio(db.Model):
         print(f'Filename acquired for {self.id}')
         processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE)
-        data = json.loads(processJSON.communicate()[0])
+        data = json.loads(processJSON.communicate()[0].decode())
         print(f'JSON acquired for {self.id}, beginning to fill.')
         self.duration = data['duration']
         self.creator = data['creator'] or data['uploader']
@@ -51,6 +52,17 @@ class YouTubeAudio(db.Model):
         print(f'Attempting download of {self.id}')
         subprocess.run(f'youtube-dl -x -4 --restrict-filenames --embed-thumbnail --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
         print(f'Download attempt for {self.id} finished.')        
+
+    @staticmethod
+    def isValid(id):
+        return re.match(r'^[A-Za-z0-9_-]{11}$', id) is not None
+
+    def toJSON(self, noConvert=False):
+        data = {'id' : self.id, 'url' : self.url, 'title' : self.title, 'creator' : self.creator,
+                'uploader' : self.uploader, 'filename' : self.filename, 'duration' : self.duration,
+                'access_count' : self.access_count, 'download_timestamp' : self.download_timestamp.isoformat(),
+                'last_access_timestamp' : self.last_access_timestamp.isoformat()}
+        return data if noConvert else json.dumps(data)
 
     def delete(self):
         os.remove(os.path.join('app', 'sounds', 'youtube', self.filename))
