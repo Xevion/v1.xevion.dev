@@ -16,7 +16,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-limiter = Limiter(app, key_func=get_remote_address, default_limits=["10 per minute"])
+limiter = Limiter(app, key_func=get_remote_address, default_limits=["10 per second"])
 
 from app import models
 from app import routes, simple_routes, hidden, dashboard
