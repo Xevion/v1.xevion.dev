@@ -29,21 +29,34 @@ def stream(service, mediaid):
         audio = get_youtube(mediaid)
         return send_file(audio.getPath(alt=True), attachment_filename=audio.filename)
     elif service == 'soundcloud':
-        return Response('Not implemented', status=501, mimetype='application/json')
+        return Response('Not implemented', status=501, mimetype='text/plain')
     elif service == 'spotify':
-        return Response('Not implemented', status=501, mimetype='application/json')
+        return Response('Not implemented', status=501, mimetype='text/plain')
     else:
-        return Response('Bad request', status=400, mimetype='application/json')
+        return Response('Bad request', status=400, mimetype='text/plain')
 
 # Returns the duration of a specific media
 @app.route('/duration/<service>/<mediaid>')
 def duration(service, mediaid):
     if service == 'youtube':
-        duration = get_youtube(mediaid).durationn
-        return Response(duration, status=200, mimetype='application/json')
+        duration = get_youtube(mediaid).duration
+        return Response(str(duration), status=200, mimetype='text/plain')
     elif service == 'soundcloud':
-        return Response('Not implemented', status=501, mimetype='application/json')
+        return Response('Not implemented', status=501, mimetype='text/plain')
     elif service == 'spotify':
-        return Response('Not implemented', status=501, mimetype='application/json')
+        return Response('Not implemented', status=501, mimetype='text/plain')
     else:
-        return Response('Bad request', status=400, mimetype='application/json')
+        return Response('Bad request', status=400, mimetype='text/plain')
+
+# Returns the duration of a specific media
+@app.route('/status/<service>/<mediaid>')
+def status(service, mediaid):
+    if service == 'youtube':
+        audio = get_youtube(mediaid).duration
+        return Response(str(duration), status=200, mimetype='text/plain')
+    elif service == 'soundcloud':
+        return Response('Not implemented', status=501, mimetype='text/plain')
+    elif service == 'spotify':
+        return Response('Not implemented', status=501, mimetype='text/plain')
+    else:
+        return Response('Bad request', status=400, mimetype='text/plain')

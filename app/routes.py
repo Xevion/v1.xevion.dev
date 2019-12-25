@@ -90,8 +90,6 @@ def user_info():
     }
     return jsonify(prepare)
 
-
-
 @app.route('/')
 def index():
     jobs = [
