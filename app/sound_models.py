@@ -66,7 +66,11 @@ class YouTubeAudio(db.Model):
         return data if noConvert else json.dumps(data)
 
     def delete(self):
-        os.remove(os.path.join('app', 'sounds', 'youtube', self.filename))
+        path = os.path.join('app', 'sounds', 'youtube', self.filename)
+        try:
+            os.remove(path)
+        except:
+            print(f'[{self.id}] Could not delete relevant file "{path}".')
         db.session.delete(self)
         db.session.commit()
 
