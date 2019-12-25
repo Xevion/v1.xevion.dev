@@ -1,6 +1,6 @@
 from app import app, db, limiter
 from app.sound_models import YouTubeAudio, SoundcloudAudio
-from flask import Response, send_file, redirect, url_for, render_template, request
+from flask import Response, send_file, redirect, url_for, render_template, request, jsonify
 from multiprocessing import Value
 from mutagen.mp3 import MP3
 import os
@@ -85,6 +85,31 @@ def status(service, mediaid):
                 return getInvalidID()
         else:
             return Response(audio.toJSON(), status=200, mimetype='application/json')
+    elif service == 'soundcloud':
+        return getNotImplemented()
+    elif service == 'spotify':
+        return getNotImplemented()
+    else:
+        return getBadRequest()
+
+@app.route('/list/<service>')
+def list(service):
+    if service == 'youtube':
+        audios = YouTubeAudio.query.all()
+        return Response(','.join(audio.id for audio in audios), status=200, mimetype='text/plain')
+    elif service == 'soundcloud':
+        return getNotImplemented()
+    elif service == 'spotify':
+        return getNotImplemented()
+    else:
+        return getBadRequest()
+
+@app.route('/all/<service>')
+def all(service):
+    if service == 'youtube':
+        audios = YouTubeAudio.query.all()
+        return jsonify([audio.toJSON(True) for audio in audios])
+        return Response(jsonify([audio.toJSON(True) for audio in audios]), status=200, mimetype='application/json')
     elif service == 'soundcloud':
         return getNotImplemented()
     elif service == 'spotify':
