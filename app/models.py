@@ -3,7 +3,6 @@ from flask_login import UserMixin
 from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
 
 # Just a note, my role system is really quite terrible, but I've implemented as good as a system as I can for a simple RBAC without Hierarchy.
 # Once could create a complex system, but it would be better to properly work with SQLAlchemy to create proper permissions, hierarchy, parent/child etc. rather than to work with simple strings.

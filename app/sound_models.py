@@ -35,11 +35,11 @@ class YouTubeAudio(db.Model):
         print(f'Filling out metadata for {self.id}')
         # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
         self.url = f'https://www.youtube.com/watch?v={self.id}'
-        processFilename = subprocess.Popen(['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--get-filename', self.url],
+        processFilename = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --get-filename {self.url}'.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE)
         self.filename = processFilename.communicate()[0].split('.')[0] + '.mp3'
         print(f'Filename acquired for {self.id}')
-        processJSON = subprocess.Popen(['youtube-dl', '-x', '--audio-format', 'mp3', '--restrict-filenames', '--dump-json', self.url],
+        processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.url}'.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE)
         data = json.loads(processJSON.communicate()[0])
         print(f'JSON acquired for {self.id}, beginning to fill.')
