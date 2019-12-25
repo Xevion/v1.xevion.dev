@@ -1,4 +1,4 @@
-from app import app, db
+from app import app, db, limiter
 from app.sound_models import YouTubeAudio, SoundcloudAudio
 from flask import Response, send_file, redirect, url_for, render_template, request
 from multiprocessing import Value
@@ -23,20 +23,21 @@ def get_youtube(mediaid):
     db.session.commit()
     return audio
 
+# Under the request context, it grabs the same args needed to decide whether the stream has been downloaded previously
+# It applies rate limiting differently based on service, and whether the stream has been accessed previously
 def downloadLimiter():
-    service = request.args.get('service')
-    mediaid = request.args.get('mediaid')
+    service, mediaid = request.view_args['service'], request.view_args['mediaid']
     if service == 'youtube':
         if YouTubeAudio.query.get(mediaid) is not None:
-            return '5 per minute'
+            return '5/minute'
         else:
-            return '1 per 30 seconds'
+            return '1/30seconds'
     else:
-        return '10 per minute'
+        return '10/minute'
 
-# Streams back the specified media back to the client 
+# Streams back the specified media back to the client
 @app.route('/stream/<service>/<mediaid>')
-@limiter.limit(downloadLimiter)
+@limiter.limit(downloadLimiter, error_message=Response('Rate limit hit', status=429, mimetype='text/plain'))
 def stream(service, mediaid):
     if service == 'youtube':
         audio = get_youtube(mediaid)
