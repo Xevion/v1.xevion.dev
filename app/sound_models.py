@@ -49,7 +49,7 @@ class YouTubeAudio(db.Model):
 
     def download(self):
         print(f'Attempting download of {self.id}')
-        subprocess.run(f'youtube-dl -x -4 --restrict-filenames --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
+        subprocess.run(f'youtube-dl -x -4 --restrict-filenames --ffmpeg-location ffmpeg --embed-thumbnail --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
         print(f'Download attempt for {self.id} finished.')        
 
     def delete(self):
