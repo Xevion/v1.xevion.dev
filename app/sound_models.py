@@ -48,10 +48,9 @@ class YouTubeAudio(db.Model):
         db.session.commit()
 
     def download(self):
-        print(f'Downloading MP3 for {self.id}')
+        print(f'Attempting download of {self.id}')
         subprocess.run(f'youtube-dl -x -4 --restrict-filenames --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
-        # os.rename(self.filename, self.getPath())
-        print(f'Finished moving {self.id} into proper folder')
+        print(f'Download attempt for {self.id} finished.')        
 
     def delete(self):
         os.remove(os.path.join('app', 'sounds', 'youtube', self.filename))
