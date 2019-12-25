@@ -44,7 +44,7 @@ def downloadLimiter():
 
 # Streams back the specified media back to the client
 @app.route('/stream/<service>/<mediaid>')
-@limiter.limit(downloadLimiter, error_message='Rate Limit Hit')
+@limiter.limit(downloadLimiter, lambda : 'global', error_message='Rate Limit Hit')
 def stream(service, mediaid):
     if service == 'youtube':
         if YouTubeAudio.isValid(mediaid):
