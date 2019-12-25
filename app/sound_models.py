@@ -5,6 +5,9 @@ import json
 import os
 import re
 
+# A Database Object describing a Audio File originating from YouTube
+# Stores basic information like Title/Uploader/URL etc. as well as holds methods useful
+# for manipulating, deleting, downloading, updating, and accessing the relevant information or file.
 class YouTubeAudio(db.Model):
     id = db.Column(db.String(11), primary_key=True) # 11 char id, presumed to stay the same for the long haul. Should be able to change to 12 chars.
     url = db.Column(db.String(64)) # 43 -> 64
@@ -17,6 +20,7 @@ class YouTubeAudio(db.Model):
     download_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_access_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    # Marks a database entry as accessed by updating timestamps and counts
     def access(self):
         print(f'{self.id} was just accessed ')
         self.access_count = (self.access_count or 0) + 1
@@ -24,6 +28,8 @@ class YouTubeAudio(db.Model):
         db.session.commit()
         return self
 
+    # Returns the path for the database entry's audio file
+    # alt: sendfile() asks for a path originating from ./app/
     def getPath(self, alt=False):
         if alt:
             return os.path.join('sounds', 'youtube', self.filename)
@@ -32,6 +38,7 @@ class YouTubeAudio(db.Model):
     def file_exists(self):
         return os.path.exists(self.getPath())
 
+    # Fills in all metadata for a database entry
     def fill_metadata(self):
         print(f'Filling out metadata for {self.id}')
         # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
@@ -49,15 +56,18 @@ class YouTubeAudio(db.Model):
         print(f'Metadata filled for {self.id}')
         db.session.commit()
 
+    # Begins the download process for a video
     def download(self):
         print(f'Attempting download of {self.id}')
         subprocess.run(f'youtube-dl -x -4 --restrict-filenames --embed-thumbnail --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
         print(f'Download attempt for {self.id} finished.')        
 
+    # Validates whether the specified ID could be a valid YouTube video ID
     @staticmethod
     def isValid(id):
         return re.match(r'^[A-Za-z0-9_-]{11}$', id) is not None
 
+    # Returns a JSON serialization of the database entry
     def toJSON(self, noConvert=False):
         data = {'id' : self.id, 'url' : self.url, 'title' : self.title, 'creator' : self.creator,
                 'uploader' : self.uploader, 'filename' : self.filename, 'duration' : self.duration,
