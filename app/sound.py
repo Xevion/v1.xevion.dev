@@ -60,7 +60,7 @@ def status(service, mediaid):
             else:
                 return Response('Invalid ID', status=400, mimetype='text/plain')
         else:
-            return Response(audio.toJSON(), status=200, mimetype='text/plain')
+            return Response(audio.toJSON(), status=200, mimetype='application/json')
     elif service == 'soundcloud':
         return Response('Not implemented', status=501, mimetype='text/plain')
     elif service == 'spotify':

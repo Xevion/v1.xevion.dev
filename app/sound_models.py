@@ -39,9 +39,10 @@ class YouTubeAudio(db.Model):
         print(f'Filename acquired for {self.id}')
         processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE)
-        data = json.loads(processJSON.communicate()[0].decode())
+        data = json.loads(processJSON.communicate()[0])
         print(f'JSON acquired for {self.id}, beginning to fill.')
         self.duration = data['duration']
+        self.url = data['webpage_url'] # Could be created, but we'll just infer from JSON response
         self.creator = data['creator'] or data['uploader']
         self.uploader = data['uploader'] or data['creator']
         self.title = data['title'] or data['alt_title'] # Do not trust alt-title ; it is volatile and uploader set, e.x. https://i.imgur.com/Tgff4rI.png
