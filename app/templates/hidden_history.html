@@ -1,4 +1,16 @@
 {% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js" integrity="sha256-H9jAz//QLkDOy/nzE9G4aYijQtkLt9FvGmdUTwBk6gs=" crossorigin="anonymous"></script>
+<script>
+    
+        $(document).ready(function () {
+        $(".timestamp").text(function (i, origText) {
+            moment(new Date("2019-012-25 12:20:21.319098 UTC")).fromNow()
+        });
+    });
+</script>
+{% endblock head %}
 {% block body %}
 <!-- Search History Section -->
 <section class="section section-padding">
@@ -10,8 +22,9 @@
                         {% set result_count = current_user.search_history.all() | length %}
                         <div class="card-header-title">
                             <div>Search History</div>
-                        <div style="padding: 0.3rem; font-weight: 100; font-size: 80%">{{ result_count }} result{% if result_count > 1 %}s{% endif %} found</div>
-                        </div>                        
+                            <div style="padding: 0.3rem; font-weight: 100; font-size: 80%">{{ result_count }}
+                                result{% if result_count > 1 %}s{% endif %} found</div>
+                        </div>
                     </div>
                     <div class="card-content">
                         <table class="table">
@@ -27,9 +40,9 @@
                                 {% for post in current_user.search_history | reverse %}
                                 <tr>
                                     <td>{{ post.id }}</td>
-                                    <td>{{ post.exact_url }}</td>
+                                    <td><a href="{{ post.exact_url }}">{{ post.exact_url }}</a></td>
                                     <td>{{ post.query_args }}</td>
-                                    <td>{{ post.timestamp }} UTC</td>
+                                    <td class="timestamp">{{ post.timestamp }} UTC</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
