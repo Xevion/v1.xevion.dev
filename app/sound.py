@@ -8,11 +8,12 @@ import re
 import json
 import subprocess
 
-# Retrieves the YouTubeAudio object relevant to the mediaid if available. If not, it facilitiates the creation and writing of one.
+# Retrieves the YouTubeAudio object relevant to the mediaid if available. If not, it facilitates the creation and writing of one.
 # Also helps with access times.
 def get_youtube(mediaid):
     audio = YouTubeAudio.query.get(mediaid)
     if audio is not None:
+        audio.access()
         return audio # sets the access time to now
     audio = YouTubeAudio(id=mediaid)
     audio.fill_metadata()
@@ -22,7 +23,7 @@ def get_youtube(mediaid):
     db.session.commit()
     return audio
 
-# Returns the duration of a specificed media
+# Streams back the specified media back to the client 
 @app.route('/stream/<service>/<mediaid>')
 def stream(service, mediaid):
     if service == 'youtube':
