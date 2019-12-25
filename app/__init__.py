@@ -5,6 +5,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_limiter import Limiter
 
 # App & App config setup
 app = Flask(__name__)
@@ -14,6 +15,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+limiter = Limiter(app, default_limits=["10 per minute"])
 
 from app import models
 from app import routes, simple_routes, hidden, dashboard

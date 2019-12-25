@@ -1,6 +1,6 @@
 from app import app, db
 from app.sound_models import YouTubeAudio, SoundcloudAudio
-from flask import Response, send_file, redirect, url_for, render_template
+from flask import Response, send_file, redirect, url_for, render_template, request
 from multiprocessing import Value
 from mutagen.mp3 import MP3
 import os
@@ -23,8 +23,20 @@ def get_youtube(mediaid):
     db.session.commit()
     return audio
 
+def downloadLimiter():
+    service = request.args.get('service')
+    mediaid = request.args.get('mediaid')
+    if service == 'youtube':
+        if YouTubeAudio.query.get(mediaid) is not None:
+            return '5 per minute'
+        else:
+            return '1 per 30 seconds'
+    else:
+        return '10 per minute'
+
 # Streams back the specified media back to the client 
 @app.route('/stream/<service>/<mediaid>')
+@limiter.limit(downloadLimiter)
 def stream(service, mediaid):
     if service == 'youtube':
         audio = get_youtube(mediaid)
