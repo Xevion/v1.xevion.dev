@@ -34,9 +34,8 @@ def get_youtube(mediaid):
 # Under the request context, it grabs the same args needed to decide whether the stream has been downloaded previously
 # It applies rate limiting differently based on service, and whether the stream has been accessed previously
 def downloadLimiter():
-    service, mediaid = request.view_args['service'], request.view_args['mediaid']
-    if service == 'youtube':
-        if YouTubeAudio.query.get(mediaid) is not None:
+    if request.view_args['service'] == 'youtube':
+        if YouTubeAudio.query.get(request.view_args['mediaid']) is not None:
             return '5/minute'
         else:
             return '1/30seconds'
