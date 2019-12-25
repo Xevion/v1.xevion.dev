@@ -34,12 +34,9 @@ class YouTubeAudio(db.Model):
     def fill_metadata(self):
         print(f'Filling out metadata for {self.id}')
         # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
-        self.url = f'https://www.youtube.com/watch?v={self.id}'
-        processFilename = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --get-filename {self.url}'.split(' '),
-                encoding='utf-8', stdout=subprocess.PIPE)
-        self.filename = processFilename.communicate()[0].split('.')[0] + '.mp3'
+        self.filename = self.id + '.mp3'
         print(f'Filename acquired for {self.id}')
-        processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.url}'.split(' '),
+        processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE)
         data = json.loads(processJSON.communicate()[0])
         print(f'JSON acquired for {self.id}, beginning to fill.')
@@ -52,8 +49,8 @@ class YouTubeAudio(db.Model):
 
     def download(self):
         print(f'Downloading MP3 for {self.id}')
-        subprocess.run(['youtube-dl', '-x', '--restrict-filenames', '--audio-format', 'mp3', self.id])
-        os.rename(self.filename, self.getPath())
+        subprocess.run(f'youtube-dl -x --restrict-filenames --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
+        # os.rename(self.filename, self.getPath())
         print(f'Finished moving {self.id} into proper folder')
 
 class SoundcloudAudio(db.Model):
