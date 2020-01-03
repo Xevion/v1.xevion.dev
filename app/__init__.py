@@ -11,6 +11,7 @@ from flask_limiter.util import get_remote_address
 # App & App config setup
 app = Flask(__name__)
 app.config.from_object(Config)
+app.url_map.strict_slashes = False
 # App extension setup
 login = LoginManager(app)
 login.login_view = 'login'
