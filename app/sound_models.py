@@ -6,7 +6,8 @@ import os
 import re
 
 # Returned when a erroring status code is returned. May end up hitting false positives, where the file was still produced properly
-# yet a erroring status code was returned. May be a good measure to always disconnect when a error code is found
+# yet a erroring status code was returned. May be a good measure to always disconnect when a error code is found.
+# Takes precedence over CouldNotDownload and CouldNotDecode exceptions.
 class CouldNotProcess(Exception):
     pass
 
@@ -58,16 +59,16 @@ class YouTubeAudio(db.Model):
         print(f'Filling out metadata for {self.id}')
         # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
         self.filename = self.id + '.mp3'
-        print(f'Filename acquired for {self.id}')
-        processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'.split(' '),
-                encoding='utf-8', stdout=subprocess.PIPE)
-        data = processJSON.communicate()[0]
-        
-        
+        command = f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'
+        processJSON = subprocess.Popen(command.split(' '),
+                encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        data = processJSON.communicate()
+        if processJSON.returncode != 0:
+            raise CouldNotProcess(f'> {command}\n{data[1]}Exit Code: {processJSON.returncode}')
         try:
-            data = json.loads(data)
+            data = json.loads(data[0])
         except json.JSONDecodeError:
-            raise CouldNotDecode(data)
+            raise CouldNotDecode(data) # We'll return the process data, figure out what to do with it higher up in stack (return/diagnose etc.)
         print(f'JSON acquired for {self.id}, beginning to fill.')
         self.duration = data['duration']
         self.url = data['webpage_url'] # Could be created, but we'll just infer from JSON response
@@ -80,7 +81,11 @@ class YouTubeAudio(db.Model):
     # Begins the download process for a video
     def download(self):
         print(f'Attempting download of {self.id}')
-        subprocess.run(f'youtube-dl -x -4 --restrict-filenames --audio-quality 64K --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
+        process = subprocess.Popen(f'youtube-dl -x -4 --restrict-filenames --audio-quality 64K --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
+        if process.returncode != 0:
+            raise CouldNotProcess(data + f'\Exit Code: {processJSON.returncode}')
+        if not os.path.exists(self.getPath()):
+            raise CouldNotDownload(process.communicate()[0])
         print(f'Download attempt for {self.id} finished.')        
 
     # Validates whether the specified ID could be a valid YouTube video ID

@@ -1,5 +1,5 @@
 from app import app, db, limiter
-from app.sound_models import YouTubeAudio, SoundcloudAudio
+from app.sound_models import YouTubeAudio, SoundcloudAudio, CouldNotDecode, CouldNotDownload, CouldNotProcess
 from flask import Response, send_file, redirect, url_for, render_template, request, jsonify
 from multiprocessing import Value
 from mutagen.mp3 import MP3
@@ -31,6 +31,23 @@ def get_youtube(mediaid):
             db.session.commit()
             return audio
 
+basic_responses = {
+    CouldNotDecode : 'Could not decode process response.',
+    CouldNotDownload : 'Could not download video.',
+    CouldNotProcess : 'Could not process.'
+}
+
+# A simple function among the routes to determine what should be returned.
+def errorCheck(e, auth=False):
+    response = str(e)
+    print(response)
+    if auth:
+        if type(e) in basic_responses.keys():
+            response += f'\n{basic_responses[type(e)]}'
+        else:
+            raise e
+    return Response(response, status=200, mimetype='text/plain')
+    
 # Under the request context, it grabs the same args needed to decide whether the stream has been downloaded previously
 # It applies rate limiting differently based on service, and whether the stream has been accessed previously
 def downloadLimiter():
@@ -48,7 +65,10 @@ def downloadLimiter():
 def stream(service, mediaid):
     if service == 'youtube':
         if YouTubeAudio.isValid(mediaid):
-            audio = get_youtube(mediaid)
+            try:
+                audio = get_youtube(mediaid)
+            except Exception as e:
+                return errorCheck(e)
             return send_file(audio.getPath(alt=True), attachment_filename=audio.filename)
         else:
             return getInvalidID()
