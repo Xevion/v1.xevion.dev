@@ -116,7 +116,7 @@ Color = Bulma Color Type of the Message Box
                             <div class="navbar-text">Dashboard</div>
                         </a>
                         <hr class="navbar-divider">
-                        {% if current_user.has_roles(['Hidden']) %}
+                        {% if current_user.has_role('Hidden') %}
                         <a class="navbar-item" href="{{ url_for('hidden') }}">                            
                             <span class="navbar-fa-icon fas fa-user-ninja"></span>
                             Hidden
