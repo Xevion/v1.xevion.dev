@@ -17,3 +17,4 @@ keys.json
 .cache-xevioni
 auth.json
 app/sounds/*
+.idea/
