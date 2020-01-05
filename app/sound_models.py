@@ -86,10 +86,10 @@ class YouTubeAudio(db.Model):
         data = process.communicate() # Not the data for the mp3, just the output. We have to separate this in order to 'wait' for the process to complete fully.
         print('Checking process return code...')
         if process.returncode != 0:
-            raise CouldNotProcess(f'Command: {command}\n{data[1]}Exit Code: {process.returncode}')
+            raise CouldNotProcess(f'Command: {command}\n{data[1] or data[0]}Exit Code: {process.returncode}')
         print('Checking for expected file...')
         if not os.path.exists(self.getPath()):
-            raise CouldNotDownload(data[1])
+            raise CouldNotDownload(data[1] or data[0])
         print(f'Download attempt for {self.id} finished successfully.')        
 
     # Validates whether the specified ID could be a valid YouTube video ID
