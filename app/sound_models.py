@@ -5,6 +5,21 @@ import json
 import os
 import re
 
+# Returned when a erroring status code is returned. May end up hitting false positives, where the file was still produced properly
+# yet a erroring status code was returned. May be a good measure to always disconnect when a error code is found
+class CouldNotProcess(Exception):
+    pass
+
+# Shouldn't happen in most cases. When a file isn't found, yet the status code for the process returned positive.
+class CouldNotDownload(Exception):
+    pass
+
+# When a JSON returning command returns undecodable JSON
+# This shouldn't occur and will only be available when a unforseen error occurs where JSON cannot be read,
+# yet a non-erroring status code was returned!
+class CouldNotDecode(Exception):
+    pass
+
 # A Database Object describing a Audio File originating from YouTube
 # Stores basic information like Title/Uploader/URL etc. as well as holds methods useful
 # for manipulating, deleting, downloading, updating, and accessing the relevant information or file.
@@ -46,7 +61,13 @@ class YouTubeAudio(db.Model):
         print(f'Filename acquired for {self.id}')
         processJSON = subprocess.Popen(f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE)
-        data = json.loads(processJSON.communicate()[0])
+        data = processJSON.communicate()[0]
+        
+        
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            raise CouldNotDecode(data)
         print(f'JSON acquired for {self.id}, beginning to fill.')
         self.duration = data['duration']
         self.url = data['webpage_url'] # Could be created, but we'll just infer from JSON response
@@ -59,7 +80,7 @@ class YouTubeAudio(db.Model):
     # Begins the download process for a video
     def download(self):
         print(f'Attempting download of {self.id}')
-        subprocess.run(f'youtube-dl -x -4 --restrict-filenames --embed-thumbnail --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
+        subprocess.run(f'youtube-dl -x -4 --restrict-filenames --audio-quality 64K --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
         print(f'Download attempt for {self.id} finished.')        
 
     # Validates whether the specified ID could be a valid YouTube video ID
