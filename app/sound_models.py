@@ -60,11 +60,11 @@ class YouTubeAudio(db.Model):
         # Use stdout=PIPE, [Python 3.6] production server support instead of 'capture_output=True' => 'process.stdout'
         self.filename = self.id + '.mp3'
         command = f'youtube-dl -4 -x --audio-format mp3 --restrict-filenames --dump-json {self.id}'
-        processJSON = subprocess.Popen(command.split(' '),
+        process = subprocess.Popen(command.split(' '),
                 encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        data = processJSON.communicate()
-        if processJSON.returncode != 0:
-            raise CouldNotProcess(f'> {command}\n{data[1]}Exit Code: {processJSON.returncode}')
+        data = process.communicate()
+        if process.returncode != 0:
+            raise CouldNotProcess(f'Command: {command}\n{data[1]}Exit Code: {process.returncode}') # process ends with a newline, not needed between
         try:
             data = json.loads(data[0])
         except json.JSONDecodeError:
@@ -81,12 +81,16 @@ class YouTubeAudio(db.Model):
     # Begins the download process for a video
     def download(self):
         print(f'Attempting download of {self.id}')
-        process = subprocess.Popen(f'youtube-dl -x -4 --restrict-filenames --audio-quality 64K --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'.split(' '))
+        command = f'youtube-dl -x -4 --restrict-filenames --audio-quality 64K --audio-format mp3 -o ./app/sounds/youtube/%(id)s.%(ext)s {self.id}'
+        process = subprocess.Popen(command.split(' '), encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        data = process.communicate() # Not the data for the mp3, just the output. We have to separate this in order to 'wait' for the process to complete fully.
+        print('Checking process return code...')
         if process.returncode != 0:
-            raise CouldNotProcess(data + f'\Exit Code: {processJSON.returncode}')
+            raise CouldNotProcess(f'Command: {command}\n{data[1]}Exit Code: {process.returncode}')
+        print('Checking for expected file...')
         if not os.path.exists(self.getPath()):
-            raise CouldNotDownload(process.communicate()[0])
-        print(f'Download attempt for {self.id} finished.')        
+            raise CouldNotDownload(data[1])
+        print(f'Download attempt for {self.id} finished successfully.')        
 
     # Validates whether the specified ID could be a valid YouTube video ID
     @staticmethod

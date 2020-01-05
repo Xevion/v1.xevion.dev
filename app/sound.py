@@ -1,6 +1,7 @@
 from app import app, db, limiter
 from app.sound_models import YouTubeAudio, SoundcloudAudio, CouldNotDecode, CouldNotDownload, CouldNotProcess
 from flask import Response, send_file, redirect, url_for, render_template, request, jsonify
+from flask_login import current_user
 from multiprocessing import Value
 from mutagen.mp3 import MP3
 import os
@@ -38,14 +39,14 @@ basic_responses = {
 }
 
 # A simple function among the routes to determine what should be returned.
-def errorCheck(e, auth=False):
-    response = str(e)
-    print(response)
-    if auth:
-        if type(e) in basic_responses.keys():
-            response += f'\n{basic_responses[type(e)]}'
-        else:
-            raise e
+# Not particularly sure how request context is passed, but it seems that either it passed or can access current_user's authenitcation/role's properly, so no problem.
+# Shows error in full context IF authenticated + admin, otherwise basic error description, OTHERWISE a basic error message.
+def errorCheck(e):
+    if type(e) in basic_responses.keys():
+        response = f'{basic_responses[type(e)]}'
+    else:
+        raise e
+    if current_user.is_authenticated and current_user.has_role('Admin'): response = str(e) + '\n' + response
     return Response(response, status=200, mimetype='text/plain')
     
 # Under the request context, it grabs the same args needed to decide whether the stream has been downloaded previously
