@@ -1,5 +1,4 @@
 import json
-import pprint
 import random
 import string
 
@@ -13,8 +12,9 @@ from app import app, db
 from app.custom import require_role
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
+from pprint import pprint
 
-print = pprint.PrettyPrinter().pprint
+pprint = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
 strgen = lambda length, charset=string.ascii_letters, weights=None: "".join(
     random.choices(list(charset), k=length, weights=weights)

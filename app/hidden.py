@@ -25,7 +25,7 @@ def hidden_help():
     return render_template("hidden_help.html")
 
 
-# Parses strings to test for "boolean-ness"
+# Parses strings to test for "boolean qualities"
 def boolparse(string, default=False):
     trues = ["true", "1"]
     if string is None:
