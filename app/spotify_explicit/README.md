@@ -12,7 +12,7 @@ Yes, the project is super simple and doesn't have that much usefulness, but it's
 
 ---
 
-```css
+```
 > python main.py
 INFO:root:Pulling data from Spotify
 INFO:root:Authorizing with Spotify via Spotipy
