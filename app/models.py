@@ -64,9 +64,7 @@ class User(UserMixin, db.Model):
         user_roles = self.get_roles()
         # Ensure whitespace is replaced with a underscore
         roles = ["_".join(role.split()) for role in roles]
-        if type(roles) == str:
-            user_roles.append(roles)
-        elif type(roles) == list:
+        if type(roles) == list:
             user_roles.extend(roles)
         user_roles = " ".join(user_roles)
         self.uroles = user_roles
