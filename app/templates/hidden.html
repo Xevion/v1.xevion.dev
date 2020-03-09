@@ -31,11 +31,11 @@
                     </div>
                     <div class="card-content">
                         <div class="content word-break resize-font">
-                            <form method="GET" action="{{ request.path }}">
+                            <form id="form" method="GET" action="{{ request.path }}">
                                 <div class="field">
-                                    <label for="tags">Tags</label>
+                                    <label for="form">Tags</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="search" name="tags" value="{{ tags }}""/>
+                                        <input class="input" type="search" name="tags" value="{{ tags }}">
                                         <span class=" icon is-small is-left">
                                         <i class="fas fa-search"></i>
                                         </span>
@@ -43,7 +43,7 @@
                                 </div>
 
                                 <div class="field">
-                                    <label for="count">Count</label>
+                                    <label for="form">Count</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="number" min="0" max="1000" name="count"
                                             value="{{ count or 50}}" />
@@ -53,7 +53,7 @@
                                     </p>
                                 </div>
                                 <div class="field">
-                                    <label for="page">Page</label>
+                                    <label for="form">Page</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="number" min="0" max="1000" name="page"
                                             value="{{ page or 0 }}" />
@@ -63,17 +63,17 @@
                                     </p>
                                 </div>
                                 <div class="field">
-                                    <label for="base64">Use base64 proxying?</label>
+                                    <label for="form">Use base64 proxying?</label>
                                     <input type="checkbox" name="base64" value="true"
                                         {% if base64 %}checked{% endif %} />
                                 </div>
                                 <div class="field">
-                                    <label for="showsample">Show fullsize (instead of thumbnail image)?</label>
+                                    <label for="form">Show fullsize (instead of thumbnail image)?</label>
                                     <input type="checkbox" name="showfull" value="true"
                                         {% if showfull %}checked{% endif %} />
                                 </div>
                                 <div class="field">
-                                    <label for="showtags">Show tags of image?</label>
+                                    <label for="form">Show tags of image?</label>
                                     <input type="checkbox" name="showtags" value="true"
                                         {% if showtags %}checked{% endif %} />
                                 </div>
