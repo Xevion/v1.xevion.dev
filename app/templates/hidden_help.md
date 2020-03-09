@@ -5,7 +5,7 @@
 Since the url for this area of my site can change for any reason and at any time,
 I will be referring to the page as `/hidden` for the sake of continuity,
 but whichever the url is under, the help page will always be at '/hidden/help', where '/hidden' is previously mentioned url.
-the url can change at any time with a small change in a config file or anywhere else, so I cannot guarentee that it will stay the same.
+the url can change at any time with a small change in a config file or anywhere else, so I cannot guarantee that it will stay the same.
 I may even have it change every hour if I say so.
 
 ## Background
@@ -73,7 +73,7 @@ will load all images with the `rating:safe` tag and the `yuri` tag.
 The `count` parameter is a integer.
 It defaults to `50` when not specified, or is `0` or is negative.
 Floating point numbers will error, along with strings.
-It's maxmimum value is `1000`.
+It's maximum value is `1000`.
 
 ##### Description
 
@@ -107,8 +107,8 @@ The parameter is not case sensitive.
 
 The `showfull` parameter is very simple.
 This requests that the page load with high quality images instead of the default thumbnail quality image.
-The Gelbooru API provides multiple links for any given image, one of which is a link for the thumnbail.
-The Gelbooru site staff prefer that sites like mine link to the thumbnail image, of which this parameter does. The thumnbail image is of significantly lower quality, but it lowers loading time for both you, as well as reduce load on the Gelbooru CDN. Out of respect for them, we ask that this parameter be kept on, as to view the full high quality version of the image, you need but click on the image itself.
+The Gelbooru API provides multiple links for any given image, one of which is a link for the thumbnail.
+The Gelbooru site staff prefer that sites like mine link to the thumbnail image, of which this parameter does. The thumbnail image is of significantly lower quality, but it lowers loading time for both you, as well as reduce load on the Gelbooru CDN. Out of respect for them, we ask that this parameter be kept on, as to view the full high quality version of the image, you need but click on the image itself.
 
 ##### Example
 
@@ -119,7 +119,7 @@ shows all images in high quality
 shows all images in thumbnail quality
 
 * `hidden/showfull=0&base64=True`
-shows all images in thumnbnail quality using `base64` encoding
+shows all images in thumbnail quality using `base64` encoding
 
 ---
 
