@@ -147,7 +147,6 @@ def list(service):
 def all(service):
     if service == "youtube":
         audios = YouTubeAudio.query.all()
-        return jsonify([audio.toJSON(True) for audio in audios])
         return Response(
             jsonify([audio.toJSON(True) for audio in audios]),
             status=200,
