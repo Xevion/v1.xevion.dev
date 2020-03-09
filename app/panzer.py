@@ -12,8 +12,7 @@ from app import app
 @app.route("/panzer/<string>")
 @app.route("/panzer/<string>/")
 def panzer(string="bionicles are cooler than sex"):
-    string = string.replace("+", " ")
-    string = string.replace("\n", "%0A")
+    string = string.replace("+", " ").replace("\n", "%0A")
     image = create_panzer(string)
     return serve_pil_image(image)
 
