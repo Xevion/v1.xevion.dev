@@ -7,9 +7,9 @@ from datetime import datetime
 from app import db
 
 
-# Returned when a erroring status code is returned. May end up hitting false positives, where the file was still produced properly
-# yet a erroring status code was returned. May be a good measure to always disconnect when a error code is found.
-# Takes precedence over CouldNotDownload and CouldNotDecode exceptions.
+# Returned when a erroring status code is returned. May end up hitting false positives, where the file was still
+# produced properly yet a erroring status code was returned. May be a good measure to always disconnect when a error
+# code is found. Takes precedence over CouldNotDownload and CouldNotDecode exceptions.
 class CouldNotProcess(Exception):
     pass
 
@@ -19,8 +19,8 @@ class CouldNotDownload(Exception):
     pass
 
 
-# When a JSON returning command returns undecodable JSON
-# This shouldn't occur and will only be available when a unforseen error occurs where JSON cannot be read,
+# When a JSON returning command returns malformed JSON
+# This shouldn't occur and will only be available when a unforeseen error occurs where JSON cannot be read,
 # yet a non-erroring status code was returned!
 class CouldNotDecode(Exception):
     pass

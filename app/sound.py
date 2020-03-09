@@ -45,9 +45,10 @@ basic_responses = {
 }
 
 
-# A simple function among the routes to determine what should be returned.
-# Not particularly sure how request context is passed, but it seems that either it passed or can access current_user's authenitcation/role's properly, so no problem.
-# Shows error in full context IF authenticated + admin, otherwise basic error description, OTHERWISE a basic error message.
+# A simple function among the routes to determine what should be returned. Not particularly sure how request context
+# is passed, but it seems that either it passed or can access current_user's authentication/role's properly,
+# so no problem. Shows error in full context IF authenticated + admin, otherwise basic error description, OTHERWISE a
+# basic error message.
 def errorCheck(e):
     if type(e) in basic_responses.keys():
         response = f"{basic_responses[type(e)]}"

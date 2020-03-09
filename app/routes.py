@@ -131,7 +131,7 @@ def user_info():
 def index():
     jobs = [
         "Student Photographer",
-        "Highschool Student",
+        "High-school Student",
         "Web Developer",
         "Python Developer",
         "Software Engineer",

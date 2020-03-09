@@ -57,7 +57,7 @@ def process_data(data):
     n = len(scores.values())
     ind = np.arange(n)
     width = 0.55
-    # Resizer figuresize to be 2.0 wider
+    # Resize figuresize to be 2.0 wider
     plt.figure(figsize=(10.0, 6.0))
     # Stacked Bars
     p1 = plt.bar(ind, explicit, width)
