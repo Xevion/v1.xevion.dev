@@ -1,8 +1,10 @@
-from flask import abort
-from flask_login import UserMixin
 from datetime import datetime
-from app import db, login
+
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+
+from app import db, login
+
 
 # Just a note, my role system is really quite terrible, but I've implemented as good as a system as I can for a simple RBAC without Hierarchy.
 # Once could create a complex system, but it would be better to properly work with SQLAlchemy to create proper permissions, hierarchy, parent/child etc. rather than to work with simple strings.
@@ -20,7 +22,7 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.String(320))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     show_email = db.Column(db.Boolean, default=False)
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -28,7 +30,7 @@ class User(UserMixin, db.Model):
         if self.password_hash is None:
             raise "{} has no password_hash set!".format(self.__repr__())
         return check_password_hash(self.password_hash, password)
-    
+
     # Retains order while making sure that there are no duplicate role values and they are capitalized 
     def post_role_processing(self):
         user_roles = self.get_roles()
@@ -51,7 +53,7 @@ class User(UserMixin, db.Model):
                     raise e
                 success = False
         return success
-                
+
     def get_roles(self):
         return self.uroles.split(' ')
 
@@ -70,7 +72,7 @@ class User(UserMixin, db.Model):
         self.uroles = user_roles
         if postprocess:
             self.post_role_processing()
-        
+
     def has_role(self, role):
         return self.has_roles([role])
 
@@ -92,6 +94,7 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+
 class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     exact_url = db.Column(db.String(160))
@@ -102,6 +105,7 @@ class Search(db.Model):
     def __repr__(self):
         return '<Search by {} @ {}>'.format(User.query.filter_by(id=self.user_id).first().username, self.timestamp)
 
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
@@ -110,6 +114,7 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
 
 @login.user_loader
 def load_user(id):

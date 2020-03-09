@@ -1,11 +1,12 @@
+import json
+import logging
 import os
 import sys
 import time
-import json
+
 from . import auth
-from . import pull
 from . import process
-import logging
+from . import pull
 
 
 def main():
@@ -13,6 +14,7 @@ def main():
     logging.info('Pulling data from Spotify')
     refresh()
     process.main()
+
 
 # Refreshes tracks from files if the token from Spotipy has expired,
 # thus keeping us up to date in most cases while keeping rate limits
@@ -27,6 +29,7 @@ def refresh():
             logging.info('Spotify data deemed to be recent enough (under {} seconds old)'.format(cache['expires_in']))
     else:
         pull.main()
+
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,13 @@
 # Main Flask and Flask configs
 from flask import Flask
-from config import Config
-# Flask Extensions
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_login import LoginManager
+from flask_migrate import Migrate
+# Flask Extensions
+from flask_sqlalchemy import SQLAlchemy
+
+from config import Config
 
 # App & App config setup
 app = Flask(__name__)

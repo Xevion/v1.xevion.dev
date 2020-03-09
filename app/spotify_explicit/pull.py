@@ -1,13 +1,14 @@
-import os
-import sys
-from . import auth
 import json
-import shutil
-import pprint
-import spotipy
 import logging
-from hurry.filesize import size, alternative
+import os
+import shutil
+
+import spotipy
 import spotipy.util as util
+from hurry.filesize import size, alternative
+
+from . import auth
+
 
 def main():
     # Get Authorization
@@ -27,8 +28,8 @@ def main():
     tracks_folder = os.path.join(os.path.dirname(__file__), 'tracks')
     logging.warning('Clearing all files in tracks folder for new files')
     if os.path.exists(tracks_folder):
-        shutil.rmtree(tracks_folder) # Delete folder and all contents (old track files)
-    os.makedirs(tracks_folder) # Recreate the folder just deleted
+        shutil.rmtree(tracks_folder)  # Delete folder and all contents (old track files)
+    os.makedirs(tracks_folder)  # Recreate the folder just deleted
     logging.info('Cleared folder, ready to download new track files')
 
     curoffset, curlimit = 0, 50

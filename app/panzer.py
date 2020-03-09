@@ -1,8 +1,11 @@
-from app import app
-from textwrap import wrap
-from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
+from textwrap import wrap
+
 import flask
+from PIL import Image, ImageDraw, ImageFont
+
+from app import app
+
 
 @app.route('/panzer/')
 @app.route('/panzer')
@@ -13,6 +16,7 @@ def panzer(string='bionicles are cooler than sex'):
     string = string.replace('\n', '%0A')
     image = create_panzer(string)
     return serve_pil_image(image)
+
 
 def create_panzer(string):
     img = Image.open("./app/static/panzer.jpeg")
@@ -27,8 +31,9 @@ def create_panzer(string):
         draw.text((topleft[0], topleft[1] + (y * 33)), text, font=font2)
     return img
 
+
 def serve_pil_image(pil_img):
     img_io = BytesIO()
     pil_img.save(img_io, 'JPEG', quality=50)
     img_io.seek(0)
-    return flask.send_file(img_io, mimetype='image/jpeg')  
+    return flask.send_file(img_io, mimetype='image/jpeg')

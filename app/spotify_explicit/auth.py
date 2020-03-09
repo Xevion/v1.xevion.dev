@@ -1,4 +1,7 @@
-import logging, sys, os, json
+import json
+import logging
+import os
+import sys
 
 # Path to API Credentials file
 PATH = os.path.join(sys.path[0], 'auth.json')
@@ -9,11 +12,11 @@ if not os.path.exists(PATH):
         # Dump a pretty-printed dictionary with default values
         json.dump(
             {
-                'USERNAME' : 'Your Username Here',
-                'CLIENT_ID' : 'Your Client ID Here',
-                'CLIENT_SECRET' : 'Your Client Secret Here',
-                'REDIRECT_URI' : 'Your Redirect URI Callback Here', 
-                'SCOPE' : ['Your Scopes Here']
+                'USERNAME': 'Your Username Here',
+                'CLIENT_ID': 'Your Client ID Here',
+                'CLIENT_SECRET': 'Your Client Secret Here',
+                'REDIRECT_URI': 'Your Redirect URI Callback Here',
+                'SCOPE': ['Your Scopes Here']
             },
             file,
             indent=3

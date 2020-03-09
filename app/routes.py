@@ -1,35 +1,37 @@
-from app import app, db, login
-from app.models import User, Search
-from app.forms import LoginForm, RegistrationForm
-from app.custom import require_role
-from werkzeug.urls import url_parse
-from flask import render_template, redirect, url_for, flash, request, jsonify, abort, send_file
-from flask_login import current_user, login_user, logout_user, login_required
-from multiprocessing import Value
-import flask
-import requests
-import xmltodict
-import random
-import string
-import faker
 import json
 import pprint
-import os
-import sys
+import random
+import string
+
+import faker
+import requests
+from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
+
+from app import app, db
+from app.custom import require_role
+from app.forms import LoginForm, RegistrationForm
+from app.models import User
 
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
-strgen = lambda length, charset=string.ascii_letters, weights=None : ''.join(random.choices(list(charset), k=length, weights=weights))
+strgen = lambda length, charset=string.ascii_letters, weights=None: ''.join(
+    random.choices(list(charset), k=length, weights=weights))
+
 
 @app.route('/', subdomain='api')
 def api_index():
     return "api"
 
+
 @app.route('/time/')
 def time():
     value = request.args.get('value')
     if not value:
-        return '<br>'.join(['[int] value', '[int list] lengths', '[string list] strings', '[boolean] reverse', '[string] pluralappend', '[boolean] synonym'])
+        return '<br>'.join(
+            ['[int] value', '[int list] lengths', '[string list] strings', '[boolean] reverse', '[string] pluralappend',
+             '[boolean] synonym'])
     value = int(value)
     lengths = request.args.get('lengths')
     if lengths: lengths = lengths.split(',')
@@ -40,9 +42,13 @@ def time():
     if lengths: lengths = list(map(int, lengths))
     reverse = request.args.get('reverse')
     if reverse: reverse = bool(reverse)
-    return timeformat(value=value, lengths=lengths or [60, 60, 24, 365], strings=strings or ['second', 'minute', 'hour', 'day', 'year'], reverse=True if reverse is None else reverse)
+    return timeformat(value=value, lengths=lengths or [60, 60, 24, 365],
+                      strings=strings or ['second', 'minute', 'hour', 'day', 'year'],
+                      reverse=True if reverse is None else reverse)
 
-def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'hour', 'day', 'year'], reverse=True, pluralappend='s', synonym=False):
+
+def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'hour', 'day', 'year'], reverse=True,
+               pluralappend='s', synonym=False):
     converted = [value]
     for index, length in enumerate(lengths):
         temp = converted[-1] // length
@@ -51,18 +57,20 @@ def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'h
         if temp != 0:
             converted.append(temp)
         else:
-            break    
+            break
     strings = strings[:len(converted)]
-    build = ['{} {}'.format(value, strings[i] + pluralappend if value > 1 or value == 0 else strings[i]) for i, value in enumerate(converted)][::-1]
+    build = ['{} {}'.format(value, strings[i] + pluralappend if value > 1 or value == 0 else strings[i]) for i, value in
+             enumerate(converted)][::-1]
     build = ', '.join(build)
     return build
+
 
 @app.route('/avatar/')
 @app.route('/avatar/<id>/')
 @app.route('/avatar/<id>')
 def getAvatar(id=''):
     # Constants
-    headers = {'Authorization' : f'Bot {app.config["DISCORD_TOKEN"]}'}
+    headers = {'Authorization': f'Bot {app.config["DISCORD_TOKEN"]}'}
     api = "https://discordapp.com/api/v6/users/{}"
     cdn = "https://cdn.discordapp.com/avatars/{}/{}.png"
     # Get User Data which contains Avatar Hash
@@ -73,22 +81,24 @@ def getAvatar(id=''):
     url = cdn.format(id, user['avatar'])
     return "<img src=\"{}\">".format(url)
 
+
 @app.route('/userinfo/')
 @login_required
 @require_role(roles=['Admin'])
 def user_info():
     prepare = {
-        'id' : current_user.get_id(),
-        'email' : current_user.email,
-        'username' : current_user.username,
-        'password_hash' : current_user.password_hash,
-        'is_active' : current_user.is_active,
-        'is_anonymous' : current_user.is_anonymous,
-        'is_authenticated' : current_user.is_authenticated,
-        'metadata' : current_user.metadata.info,
-        'uroles' : current_user.get_roles()
+        'id': current_user.get_id(),
+        'email': current_user.email,
+        'username': current_user.username,
+        'password_hash': current_user.password_hash,
+        'is_active': current_user.is_active,
+        'is_anonymous': current_user.is_anonymous,
+        'is_authenticated': current_user.is_authenticated,
+        'metadata': current_user.metadata.info,
+        'uroles': current_user.get_roles()
     }
     return jsonify(prepare)
+
 
 @app.route('/')
 def index():
@@ -100,6 +110,7 @@ def index():
         'Software Engineer',
     ]
     return render_template('index.html', job=random.choice(jobs))
+
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -114,6 +125,7 @@ def register():
         flash('Registered Successfully!', 'info')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form, hideRegister=True)
+
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -131,6 +143,7 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form, hideLogin=True)
+
 
 @app.route('/logout/')
 def logout():
