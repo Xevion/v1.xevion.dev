@@ -16,39 +16,62 @@ from app.models import User
 
 print = pprint.PrettyPrinter().pprint
 fake = faker.Faker()
-strgen = lambda length, charset=string.ascii_letters, weights=None: ''.join(
-    random.choices(list(charset), k=length, weights=weights))
+strgen = lambda length, charset=string.ascii_letters, weights=None: "".join(
+    random.choices(list(charset), k=length, weights=weights)
+)
 
 
-@app.route('/', subdomain='api')
+@app.route("/", subdomain="api")
 def api_index():
     return "api"
 
 
-@app.route('/time/')
+@app.route("/time/")
 def time():
-    value = request.args.get('value')
+    value = request.args.get("value")
     if not value:
-        return '<br>'.join(
-            ['[int] value', '[int list] lengths', '[string list] strings', '[boolean] reverse', '[string] pluralappend',
-             '[boolean] synonym'])
+        return "<br>".join(
+            [
+                "[int] value",
+                "[int list] lengths",
+                "[string list] strings",
+                "[boolean] reverse",
+                "[string] pluralappend",
+                "[boolean] synonym",
+            ]
+        )
     value = int(value)
-    lengths = request.args.get('lengths')
-    if lengths: lengths = lengths.split(',')
-    strings = request.args.get('strings')
-    if strings: strings = strings.split(',')
-    if (len(lengths or []) + len(strings or []) > 0) and (len(lengths or []) + 1 != len(strings or [])):
-        return f'error: lengths ({len(lengths or [])}) and strings ({len(strings or [])}) arrays must be same length to process properly'
-    if lengths: lengths = list(map(int, lengths))
-    reverse = request.args.get('reverse')
-    if reverse: reverse = bool(reverse)
-    return timeformat(value=value, lengths=lengths or [60, 60, 24, 365],
-                      strings=strings or ['second', 'minute', 'hour', 'day', 'year'],
-                      reverse=True if reverse is None else reverse)
+    lengths = request.args.get("lengths")
+    if lengths:
+        lengths = lengths.split(",")
+    strings = request.args.get("strings")
+    if strings:
+        strings = strings.split(",")
+    if (len(lengths or []) + len(strings or []) > 0) and (
+        len(lengths or []) + 1 != len(strings or [])
+    ):
+        return f"error: lengths ({len(lengths or [])}) and strings ({len(strings or [])}) arrays must be same length to process properly"
+    if lengths:
+        lengths = list(map(int, lengths))
+    reverse = request.args.get("reverse")
+    if reverse:
+        reverse = bool(reverse)
+    return timeformat(
+        value=value,
+        lengths=lengths or [60, 60, 24, 365],
+        strings=strings or ["second", "minute", "hour", "day", "year"],
+        reverse=True if reverse is None else reverse,
+    )
 
 
-def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'hour', 'day', 'year'], reverse=True,
-               pluralappend='s', synonym=False):
+def timeformat(
+    value,
+    lengths=[60, 60, 24, 365],
+    strings=["second", "minute", "hour", "day", "year"],
+    reverse=True,
+    pluralappend="s",
+    synonym=False,
+):
     converted = [value]
     for index, length in enumerate(lengths):
         temp = converted[-1] // length
@@ -58,19 +81,23 @@ def timeformat(value, lengths=[60, 60, 24, 365], strings=['second', 'minute', 'h
             converted.append(temp)
         else:
             break
-    strings = strings[:len(converted)]
-    build = ['{} {}'.format(value, strings[i] + pluralappend if value > 1 or value == 0 else strings[i]) for i, value in
-             enumerate(converted)][::-1]
-    build = ', '.join(build)
+    strings = strings[: len(converted)]
+    build = [
+        "{} {}".format(
+            value, strings[i] + pluralappend if value > 1 or value == 0 else strings[i]
+        )
+        for i, value in enumerate(converted)
+    ][::-1]
+    build = ", ".join(build)
     return build
 
 
-@app.route('/avatar/')
-@app.route('/avatar/<id>/')
-@app.route('/avatar/<id>')
-def getAvatar(id=''):
+@app.route("/avatar/")
+@app.route("/avatar/<id>/")
+@app.route("/avatar/<id>")
+def getAvatar(id=""):
     # Constants
-    headers = {'Authorization': f'Bot {app.config["DISCORD_TOKEN"]}'}
+    headers = {"Authorization": f'Bot {app.config["DISCORD_TOKEN"]}'}
     api = "https://discordapp.com/api/v6/users/{}"
     cdn = "https://cdn.discordapp.com/avatars/{}/{}.png"
     # Get User Data which contains Avatar Hash
@@ -78,74 +105,76 @@ def getAvatar(id=''):
     if response.status_code != 200:
         return response.text
     user = json.loads(response.text)
-    url = cdn.format(id, user['avatar'])
-    return "<img src=\"{}\">".format(url)
+    url = cdn.format(id, user["avatar"])
+    return '<img src="{}">'.format(url)
 
 
-@app.route('/userinfo/')
+@app.route("/userinfo/")
 @login_required
-@require_role(roles=['Admin'])
+@require_role(roles=["Admin"])
 def user_info():
     prepare = {
-        'id': current_user.get_id(),
-        'email': current_user.email,
-        'username': current_user.username,
-        'password_hash': current_user.password_hash,
-        'is_active': current_user.is_active,
-        'is_anonymous': current_user.is_anonymous,
-        'is_authenticated': current_user.is_authenticated,
-        'metadata': current_user.metadata.info,
-        'uroles': current_user.get_roles()
+        "id": current_user.get_id(),
+        "email": current_user.email,
+        "username": current_user.username,
+        "password_hash": current_user.password_hash,
+        "is_active": current_user.is_active,
+        "is_anonymous": current_user.is_anonymous,
+        "is_authenticated": current_user.is_authenticated,
+        "metadata": current_user.metadata.info,
+        "uroles": current_user.get_roles(),
     }
     return jsonify(prepare)
 
 
-@app.route('/')
+@app.route("/")
 def index():
     jobs = [
-        'Student Photographer',
-        'Highschool Student',
-        'Web Developer',
-        'Python Developer',
-        'Software Engineer',
+        "Student Photographer",
+        "Highschool Student",
+        "Web Developer",
+        "Python Developer",
+        "Software Engineer",
     ]
-    return render_template('index.html', job=random.choice(jobs))
+    return render_template("index.html", job=random.choice(jobs))
 
 
-@app.route('/register/', methods=['GET', 'POST'])
+@app.route("/register/", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for("dashboard"))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Registered Successfully!', 'info')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form, hideRegister=True)
+        flash("Registered Successfully!", "info")
+        return redirect(url_for("login"))
+    return render_template(
+        "register.html", title="Register", form=form, hideRegister=True
+    )
 
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route("/login/", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for("dashboard"))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password', 'error')
-            return redirect(url_for('login'))
+            flash("Invalid username or password", "error")
+            return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
+        next_page = request.args.get("next")
+        if not next_page or url_parse(next_page).netloc != "":
+            next_page = url_for("index")
         return redirect(next_page)
-    return render_template('login.html', title='Login', form=form, hideLogin=True)
+    return render_template("login.html", title="Login", form=form, hideLogin=True)
 
 
-@app.route('/logout/')
+@app.route("/logout/")
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for("index"))

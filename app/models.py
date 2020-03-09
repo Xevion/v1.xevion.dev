@@ -16,9 +16,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     register_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     password_hash = db.Column(db.String(64))
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
-    search_history = db.relationship('Search', backref='user', lazy='dynamic')
-    uroles = db.Column(db.String(80), default='')
+    posts = db.relationship("Post", backref="author", lazy="dynamic")
+    search_history = db.relationship("Search", backref="user", lazy="dynamic")
+    uroles = db.Column(db.String(80), default="")
     about_me = db.Column(db.String(320))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     show_email = db.Column(db.Boolean, default=False)
@@ -31,11 +31,11 @@ class User(UserMixin, db.Model):
             raise "{} has no password_hash set!".format(self.__repr__())
         return check_password_hash(self.password_hash, password)
 
-    # Retains order while making sure that there are no duplicate role values and they are capitalized 
+    # Retains order while making sure that there are no duplicate role values and they are capitalized
     def post_role_processing(self):
         user_roles = self.get_roles()
         user_roles = list(dict.fromkeys(user_roles))
-        self.uroles = ' '.join([role.title() for role in user_roles])
+        self.uroles = " ".join([role.title() for role in user_roles])
         self.uroles = self.uroles.strip()
 
     def delete_role(self, role):
@@ -55,7 +55,7 @@ class User(UserMixin, db.Model):
         return success
 
     def get_roles(self):
-        return self.uroles.split(' ')
+        return self.uroles.split(" ")
 
     def add_role(self, role):
         self.add_roles([role])
@@ -63,12 +63,12 @@ class User(UserMixin, db.Model):
     def add_roles(self, roles, postprocess=True):
         user_roles = self.get_roles()
         # Ensure whitespace is replaced with a underscore
-        roles = ['_'.join(role.split()) for role in roles]
+        roles = ["_".join(role.split()) for role in roles]
         if type(roles) == str:
             user_roles.append(roles)
         elif type(roles) == list:
             user_roles.extend(roles)
-        user_roles = ' '.join(user_roles)
+        user_roles = " ".join(user_roles)
         self.uroles = user_roles
         if postprocess:
             self.post_role_processing()
@@ -92,7 +92,7 @@ class User(UserMixin, db.Model):
         return True
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return "<User {}>".format(self.username)
 
 
 class Search(db.Model):
@@ -100,20 +100,22 @@ class Search(db.Model):
     exact_url = db.Column(db.String(160))
     query_args = db.Column(db.String(120))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __repr__(self):
-        return '<Search by {} @ {}>'.format(User.query.filter_by(id=self.user_id).first().username, self.timestamp)
+        return "<Search by {} @ {}>".format(
+            User.query.filter_by(id=self.user_id).first().username, self.timestamp
+        )
 
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return "<Post {}>".format(self.body)
 
 
 @login.user_loader
