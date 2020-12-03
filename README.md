@@ -1,5 +1,7 @@
 # Xevion.dev
 
+**Archival Notice:** This repository was archived after prolonged inactivity by me. This site wasn't awful, it just wasn't effectively using the domain or resources allocated to it. Hosting a useless site is not productive and now I want to free the repository name up to be used by a GitHub Pages site via Jekyll. See said site repo [here](https://github.com/Xevion/xevion.dev).
+
 ## Purpose
 
 The purpose of my site, [Xevion.dev](https://xevion.dev), is to display my site, learn Flask and other web development frameworks, and overall get some real experience.
